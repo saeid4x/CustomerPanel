@@ -1,0 +1,21 @@
+.PointsOrderOtherBranch-content{
+    width:80%; 
+    float:left;
+    direction: rtl;
+    /* border:1px solid red; */
+    margin:10px 0 0 15px
+}
+.PointsOrderOtherBranch-content label{
+    float: right;
+}
+.PointsOrderOtherBranch-content span{
+    float: right;
+    opacity: 0.8;
+}
+.pointWithOtherBranch-details ul li{
+    /* direction: rtl; */
+    text-align: right
+
+}
+ 
+ 

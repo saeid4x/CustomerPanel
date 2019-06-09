@@ -1,0 +1,66 @@
+.CompleteReport{
+    border:3px solid purple;
+    width:80%;
+    margin-left:20px;
+    
+
+}
+.CompleteReport-table{
+    float: right;
+    direction: rtl
+}
+.CompleteReport-table tr,td,th{
+    border:1px solid black;
+     
+    
+  
+}
+
+.CompleteReport-searchSection{
+    /* border:1px solid red; */
+    margin-top:-35px;
+}
+
+.CompleteReport-searchSection h3{
+    float: right;
+     
+}
+.DateRangePickerStart{
+    border:1px solid blue;
+     
+}
+.DateRangePickerEnd{
+    border:1px solid blue;
+    
+}
+.completeReport-dateSelected{
+   text-align: center;
+    color:'#424242';
+    direction:rtl
+    
+}
+.completeReport-DetailsTable-table{
+    direction: rtl;
+    margin:30px 200px 0 0;
+    font-size:20px;
+    
+
+}
+ 
+.completeReport-DetailsTable-table tr,td,th{
+    border:1px solid blue;
+   
+}
+.showProfile-showProfile{
+    float: right;
+    direction: rtl;
+     
+}
+
+.showProfile-details{
+    margin-left:500px
+}
+ 
+
+
+/* .btn{ border-radius: 50%; width:32px; height:32px; line-height:18px;  } */

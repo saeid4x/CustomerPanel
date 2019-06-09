@@ -1,0 +1,19 @@
+.loin-content{
+    direction: rtl;
+    float: center;
+}
+.loin-content button[type='submit']{
+    margin-left:500px;
+    width:100px;
+   
+}
+.loin-content h4{
+    /* margin-left:100px; */
+    text-align:center
+
+    
+}
+.loin-content label{
+    float: right
+}
+ 

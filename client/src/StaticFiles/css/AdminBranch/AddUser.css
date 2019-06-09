@@ -1,0 +1,13 @@
+.adminBranch-adduser{
+    direction: rtl
+}
+.adminBranch-adduser label{
+    float: right;
+}
+
+.adminBranch-adduser-content{
+    width: 80%;
+    /* border:1px solid red; */
+    float:left;
+    margin:3px 0 0 10px;
+}

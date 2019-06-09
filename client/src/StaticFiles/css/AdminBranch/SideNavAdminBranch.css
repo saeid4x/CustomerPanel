@@ -1,0 +1,50 @@
+.adminBranch-sidenav{
+    border:1px solid red;
+    width:220px;
+    height: 100%;
+    float: right;
+    background-color: #3d5afe;
+    color:white
+}
+.adminBranch-sidenav li{
+    list-style-type: none;
+    direction: rtl;
+    /* border:1px solid red; */
+    text-align:right;
+    margin-left:20px;
+    margin-top:10px
+    
+   
+}
+.adminBranch-sidenav ul li a{
+    color:white;
+    
+
+}
+.adminBranch-avatar{
+    border:1px solid greenyellow;
+    height:200px;
+
+}
+.adminBranch-avatar img{
+    border:1px solid greenyellow;
+    width:100px;
+    height: 100px;
+    margin:20px 0 0 70px;
+    border-radius: 20%;
+}
+
+.adminBranch-avatar-username{
+    font-size:25px;
+    margin:0 0 0 60px;
+}
+.adminBranch-avatar-typeUser{
+    font-size:18px;
+    margin:0 0 0 80px;
+}
+.adminBranch-content{
+    border:1px solid red;
+    height: 100%;
+    width:80%;
+    margin-left:20px;
+}

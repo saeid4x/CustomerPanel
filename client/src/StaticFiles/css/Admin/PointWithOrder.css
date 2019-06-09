@@ -1,0 +1,18 @@
+.PointsWithOrder-content {
+    width:80%; 
+    float:left;
+    direction: rtl;
+    /* border:1px solid red; */
+    margin:10px 0 0 15px
+}
+.PointsWithOrder-content label{
+    float: right;
+}
+.PointsWithOrder-content span{
+    float: right;
+    opacity: 0.8;
+}
+.pointWithOrder-detailPoint ul{
+    direction: rtl;
+text-align: right
+}

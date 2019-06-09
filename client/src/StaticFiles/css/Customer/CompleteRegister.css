@@ -1,0 +1,6 @@
+.completeRegister-content{
+    direction: rtl
+}
+.completeRegister-content label{
+    float: right;
+}

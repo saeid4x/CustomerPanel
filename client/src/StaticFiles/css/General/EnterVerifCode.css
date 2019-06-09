@@ -1,0 +1,12 @@
+.EnterVerifCode-content{
+    /* border:1px solid #ff0000; */
+     
+}
+ .enterVerifCode-link{
+     margin-top:25px;
+     font-size: 18px;
+ }
+ .enterVerifCode-link> a{
+     text-decoration: none
+     
+ }

@@ -1,0 +1,12 @@
+.homePage-content{
+    /* border:1px solid red; */
+    width: 50%;
+    direction: rtl;
+    float: left;
+    margin:5px 0 0 400px
+    
+}
+.homePage-content ul li{
+    text-align: center
+}
+ 

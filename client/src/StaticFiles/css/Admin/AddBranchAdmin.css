@@ -1,0 +1,11 @@
+.AddBranchAdmin-content{
+    float: left;
+    width: 80%;
+    /* border:1px solid red; */
+    margin:5px 0 0 15px;
+    direction: rtl
+}
+.AddBranchAdmin-content label{
+    float: right;
+   
+}

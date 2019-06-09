@@ -1,0 +1,13 @@
+.setting-content{
+    width:80%;
+    float: left;
+
+
+}
+.setting-content ul{
+    margin:5px 0 0 30px
+}
+.setting-content ul li{
+    text-align: right;
+
+}

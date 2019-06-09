@@ -1,0 +1,48 @@
+.adminSideNav{
+    border:1px solid  #4527a0;
+    width:220px;
+    height: 100%;
+    float: right;
+    background-color: #3949ab;
+    color:white
+}
+.admin-avatar{
+    /* border:1px solid greenyellow; */
+    height:200px;
+
+}
+.admin-avatar img{
+    border:1px solid greenyellow;
+    width:100px;
+    height: 100px;
+    margin:20px 0 0 70px;
+    border-radius: 20%;
+}
+
+.admin-avatar-username{
+    font-size:25px;
+    margin:0 0 0 60px;
+}
+.admin-avatar-typeUser{
+    font-size:18px;
+    margin:0 0 0 80px;
+}
+.admin-content{
+    border:1px solid #4527a0;
+    height: 100%;
+    width:80%;
+    /* margin-left:20px; */
+}
+.adminSideNav ul li {
+    list-style-type: none;
+    direction: rtl;
+    /* border:1px solid red; */
+    text-align:center;
+    margin-right:10px;
+   
+    margin-top:10px
+
+}
+.adminSideNav li a{
+    color:white
+}

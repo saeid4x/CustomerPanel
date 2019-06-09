@@ -1,0 +1,11 @@
+.profileSetting-content{
+    width:80%;
+    /* border:1px solid red; */
+    float: left;
+    margin:15px 0 0 20px;
+    /* border:1px solid red */
+}
+.profileSetting-content ul li{
+    text-align: right
+
+}

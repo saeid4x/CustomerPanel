@@ -1,0 +1,21 @@
+ 
+ 
+.DetailsTable-table{
+    float: right;
+    direction: rtl;
+    margin:30px 100px 0 0;
+}
+.DetailsTable-table tr,td,th{
+    border:1px solid  #00695c
+    
+  
+}
+
+.DateRangePickerStart{
+    border:1px solid blue;
+     
+}
+.DateRangePickerEnd{
+    border:1px solid blue;
+    
+}
