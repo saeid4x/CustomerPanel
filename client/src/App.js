@@ -23,6 +23,8 @@ import ReportComplete from './components/Admin/ReportComplete';
 import ReportsOption from './components/Admin/ReportsOption';
 import AddOrder from './components/Admin_Branch/AddOrder';
 import AddUser from './components/Admin_Branch/AddUser'
+import AdminBranchDashboard from './components/Admin_Branch/AdminBranchDashboard'
+
 // import Parent from './components/test/Parent';
 
 import EditProfile from './components/Customer/EditProfile';
@@ -34,6 +36,8 @@ import DetailsTable from './components/Customer/DetailsTable';
 import CompleteReport from './components/Customer/CompleteReport';
 import ReportSetting from './components/Customer/ReportsSetting';
 import SideNavigation from './components/Customer/SideNavigation';
+import CardTowRow from './components/General/CardTowRow';
+
  
 
 
@@ -52,7 +56,7 @@ function App() {
           <Route  exact path="/user/:mobile/verifyCode" component={VerifyCode} />
 
           <Route  path="/user/register/" component={CompleteRegister} />
-          <Route  path="/user/dashboard" component={CustomerDashboard} />
+          <Route  path="/customer/dashboard" component={CustomerDashboard} />
           {/* <Route  path="/customer/:userID/editProfile" component={EditProfile} />
           <Route  path="/customer/:userID/profile" component={ShowProfile} /> */}
           <Route  path="/customer/:userID/report/branchSpec" component={ReportBranchSpec} />
@@ -81,9 +85,10 @@ function App() {
 
           <Route exact path="/adminBranch/addOrder/:userID/:userMobile" component={AddOrder} />
           <Route exact path="/adminBranch/addUser" component={AddUser} />
+          <Route exact path="/adminBranch/dashboard" component={AdminBranchDashboard} />
 
-          <Route path="/test" component={ReportSetting}/>
-          <Route path="/test2" component={CompleteReport}/>
+          <Route path="/test" component={AdminBranchDashboard}/>
+          <Route path="/test2" component={CustomerDashboard}/>
           {/* <Route path="/test3" component={DateTime}/> */}
            
         </Switch>

@@ -138,15 +138,16 @@ handleEmail=(e)=>{
                     password:this.password.value,
                     mobile:this.state.mobile,                
                     // passwordConfirm:this.passwordConfirm.value,
-                    email:this.email.value
+                    email:this.email.value,
+                    isFillCompleteRegistration:1
                 }
                 Axios.post(keys.backendUrl+'api/complateRegisteration',formData)
                     .then((data)=>{
                         if(data.data){
                             
-                            localStorage.setItem('userID',data.data._id)
+                            // localStorage.setItem('userID',data.data._id)
                             this.setState({
-                                isFormRegistered:true
+                                isFormRegistered:1
                             })
                         } 
 
@@ -154,10 +155,25 @@ handleEmail=(e)=>{
                     .then(()=>{
                         if(this.state.isFormRegistered == 1){
                             //show message that form successfuly registered
+                            switch(localStorage.getItem('roleUser')){
+                                case 'admin':{
+                                    //go to admin dashboard
+                                    this.props.history.push('/admin/dashboard');
+                                }
+                                break;
+                                case 'customer':{
+                                    //go to customer dashboard
+                                    this.props.history.push('/customer/dashboard');
+                                }
+                                break;
+                                case 'adminBranch':{
+                                    //go to adminBranch dashboard
+                                    this.props.history.push('/adminBranch/dashboard');
+                                }
+                                break;
 
+                            }
 
-                            //go to dashboard (default= customer)
-                            this.props.history.push('/user/dashboard')
 
                         }
                     })

@@ -1,0 +1,12 @@
+.CardTwoRow{
+    border:1px solid rgba(142,140,216 ,1);
+    /* width: 25%; */
+    height: 130px;
+    background-color:#1e88e5
+}
+.CardTwoRow-content{
+    direction: rtl;
+    text-align:center;
+    color:white;
+    font-size: 23px
+}

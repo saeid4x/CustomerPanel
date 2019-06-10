@@ -43,10 +43,29 @@ export default class extends Component{
     }
     handleSubmit=(e)=>{
         e.preventDefault();
-
         if(this.mobile.value){
             if(Helper.validation(this.mobile.value,Keys.pattern.mobile)){
                 localStorage.setItem('mobile',this.mobile.value);
+                
+                //******************************************* */
+                Axios.get(Keys.backendUrl+'api/getUser/'+this.mobile.value)
+                    .then((data)=>{
+                        if(data){
+                            
+                            console.log('650',data.data)
+                            localStorage.setItem('userID',data.data._id);
+                        }
+                        else if(data.data.err){
+                            console.log('650',data.data.err)
+                        }
+
+                    })
+
+
+
+                // *********************************************
+
+
         
                 this.setState({
                     mobile:this.mobile.value,
@@ -61,14 +80,17 @@ export default class extends Component{
                 Axios.post(Keys.backendUrl+'api/checkActiveUser',data)
                   
                  .then((data)=>{
-                     if(data.data == 'verify'){
+                     if(data.data.status == 'verify'){
                          //redirect user to password page
-                       this.props.history.push('/login/password/'+this.mobile.value);
+                       
+                    //    this.props.history.push('/login/password/'+this.mobile.value);
+
+                       this.props.history.push('/login/password');
                          this.setState({
                              isActiveUser:true
                          })
                      }
-                     else if(data.data == 'no-user'){
+                     else if(data.data.status == 'no-user'){
                          //generate verify code 
                         
                          Axios.get(Keys.backendUrl+'api/generateVerifyCode')

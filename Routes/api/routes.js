@@ -33,7 +33,7 @@ var upload=multer({
       mongoose = require("mongoose");
       var url='mongodb://127.0.0.1:27017/customerClub';
      var urlCloud='mongodb+srv://saeid:saeid123@cluster0-z7vca.mongodb.net/customerClub?retryWrites=true&w=majority'
-  mongoose.connect(urlCloud,{useNewUrlParser:true},(err,success)=>{
+  mongoose.connect(url,{useNewUrlParser:true},(err,success)=>{
     if(err){
       console.log('error coonnect to database=',err);
     }
@@ -53,39 +53,25 @@ router.get('/',(req,res)=>{
 
 router.post('/checkActiveUser',upload.none(),(req,res)=>{
 
-   
+   var status;
     userModel.findOne({mobile:req.body.mobile}).then((data,err)=>{
         if(data ){  
              
             if(data.isVerifiedMobile==1) {
-                status= 'verify';              
+                status= 'verify';  
+                res.json({status:'verify',data:data})            
 
             }
             else if(data.isVerifiedMobile ==0){
-                status= 'no-verify';                           
+              res.json({status:'no-verify',data:data})                      
 
             }
 
         }
         else {
-            status=  'no-user';
+          res.json({status:'no-user'})  
         }
-    }).then(()=>{
-      switch(status){
-        case 'verify' :{
-          res.send('verify')
-        }
-        break;
-        case 'no-verify':{
-          res.send('no-verify');
-        }
-        break;
-        case 'no-user':{
-          res.send('no-user')
-        }
-      }
-        
-    });
+    }) 
     
 });
    
@@ -138,9 +124,30 @@ router.post('/getUser',(req,res)=>{
         }
        
       })
-
-   
  })
+
+ //get user info based-id
+ router.get('/:userID/getUser',(req,res)=>{
+   userModel.findOne({_id:req.params.userID})
+    .then((data)=>{
+      if(data){
+        res.json({userInfo:data});
+      }else{
+        res.json({userInfo:null})
+      }
+    })
+ })
+
+ //get user based mobile
+  router.get('/getUser/:mobile',(req,res)=>{
+    userModel.findOne({mobile:req.params.mobile})
+      .then((data)=>{
+
+        res.json(data)
+      }).catch((err)=>{
+        res.json(err)
+      })
+  })
  router.post('/changeAccountStatus',(req,res)=>{
    let accountStatus=req.body.accountStatus;
    let mobile=req.body.mobile;
@@ -158,6 +165,8 @@ router.post('/getUser',(req,res)=>{
      }
    })
  })
+
+ 
 router.post('/initialUser',(req,res)=>{
   //update user
   new userModel({

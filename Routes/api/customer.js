@@ -3,6 +3,7 @@ var express=require('express'),
    var multer=require('multer');
 var profileModel=require('../../Models/profile');
 var orderModel=require('../../Models/orders');
+var lotteryUsersModel=require('../../Models/LotteryUsers');
 var path=require('path')
 var Helper=require('../../Controller/Helper')
 
@@ -179,4 +180,39 @@ router.post('/test3',(req,res)=>{
          console.log(data)
       })
 })
+
+router.get('/:userID/orders/totalPriceAndCountOrder',(req,res)=>{
+   let userID='user120';
+   var test= orderModel.aggregate([
+      {$match:{userID:userID}} ,
+      {$group:{_id:"$userID",count:{$sum:1},total:{$sum:'$orderPrice'},point:{$sum:'$orderPoint'}}} 
+    ]).exec((err,loc)=>{
+        loc.map(item=>{
+         res.json({total:item.total,count:item.count,totalPoint:item.point});
+        })
+        
+    });
+})
+
+
+
+router.get('/test',(req,res)=>{
+   new lotteryUsersModel({
+      userID:'user120',
+      fromDate:120,
+      toDate:80,
+      lotteryType:'month'
+   }).save((err,doc)=>{
+      if(doc){
+         res.json(doc)
+      }
+      else if(err){
+         res.json(err)
+      }
+     
+   })
+
+})
+
+
 module.exports=router;
