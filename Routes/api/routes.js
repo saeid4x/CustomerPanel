@@ -32,7 +32,7 @@ var upload=multer({
   var mongodb = require("mongodb"),
       mongoose = require("mongoose");
       var url='mongodb://127.0.0.1:27017/customerClub';
-     var urlCloud='mongodb+srv://saeid:saeid123@cluster0-z7vca.mongodb.net/customerClub?retryWrites=true&w=majority'
+     var urlCloud='mongodb+srv://saeid:saeid123@cluster0-z7vca.mongodb.net/customerClub?retryWrites=false&w=majority'
   mongoose.connect(urlCloud,{useNewUrlParser:true},(err,success)=>{
     if(err){
       console.log('error coonnect to database=',err);
