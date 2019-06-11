@@ -19,12 +19,17 @@ export default class extends Component{
             then((data)=>{
                 if(data){
                     console.log(data.data);
-                    let id=data.data._id
-                    this.props.history.push('/adminBranch/addOrder/'+id+'/'+this.state.userMobile);
+                    let id=data.data._id;
+                    localStorage.setItem('customerID',id);
+                    localStorage.setItem('customerMobile',this.mobile.value);
+                    this.props.history.push('/adminBranch/addOrder');
                 }
             })
 
 
+    }
+    componentDidMount(){
+        localStorage.removeItem('customerID');
     }
     render(){
         return(

@@ -17,6 +17,15 @@ router.get('/',(req,res)=>{
     res.send('api-admin');
 });
 
+router.get('/getBranches',(req,res)=>{
+    branchModel.find({})
+        .then((data)=>{
+            if(data){
+                res.json(data)
+            }
+        })
+})
+
 router.post('/addBranch',(req,res)=>{
     let branchName=req.body.branchName;
 
@@ -53,8 +62,10 @@ router.post('/addBranchAdmin',(req,res)=>{
     userModel.findOneAndUpdate({mobile:adminInfo.mobile},{$set:adminInfo},{upsert:true})
         .then((data)=>{
             if(data){
+                console.log('********',data)
                 branchModel.findOneAndUpdate({_id:adminInfo.branchID},{$set:{adminBranch:data._id}})
                     .then((data)=>{
+                        
                          res.json(data)
                     })
             }
@@ -71,10 +82,13 @@ router.post('/addBranchAdmin',(req,res)=>{
 router.post('/addBasePoint',(req,res)=>{
     let basePoint =req.body.basePoint;
     let basePrice=req.body.basePrice
-    pointModel.findOneAndUpdate({basePoint,basePrice},{basePoint,basePrice},{upsert:true})
-        .then((data)=>{
-            console.log(data)
 
+    pointModel.findOneAndUpdate({constant:1},{$set:{basePoint,basePrice}})
+        .then((data)=>{
+          res.json(data)
+
+        }).catch((err)=>{
+            res.json(err)
         })
    
 });
@@ -143,17 +157,18 @@ router.post('/addLotteryOption',(req,res)=>{
  
 //report order  branchs
  router.post('/report/orderBranch',(req,res)=>{
-     let {branchID,formDate,toDate}=req.body;
+     let {branchID,fromDate,toDate}=req.body;
 
 
-     let fromDataMili=Helper.MiladiToMilisecond(Helper.toMiladi(fromDate));
-     let toDataMili=Helper.MiladiToMilisecond(Helper.toMiladi(toDate));
+     let fromDateMili=Helper.MiladiToMilisecond(Helper.ToMiladi(fromDate));
+     let toDateMili=Helper.MiladiToMilisecond(Helper.ToMiladi(toDate));
 
 
      
    orderModel.find({branchID,orderDate:{$lte:toDateMili,$gte:fromDateMili}})
    .then((data)=>{
       if(data){
+          console.log(data)
          res.json(data)
       }
       
@@ -172,5 +187,32 @@ router.post('/addLotteryOption',(req,res)=>{
                 res.json(data)
             }
         })
+ })
+
+
+ router.get('/dashboard/countOfBranches',(req,res)=>{
+    branchModel.aggregate([
+        {$group:{_id:'$branchName'}},
+        {$count:'countBranches'}
+    ]).exec((err,loc)=>{
+        if(loc){
+            loc.map(item=>{
+                res.json({'count':item.countBranches})
+            })
+        }
+    })
+ })
+
+ router.get('/dashboard/sumOfOrders',(req,res)=>{
+//      orderModel.aggregate([
+//          {$group:{_id:'$userID'}},
+//          {total:{$sum:'$orderPrice'}}
+//      ]).exec((err,loc)=>{
+//          if(loc){
+//              loc.map(item=>{
+//                  res.json({sumOrderPrice:item.total})
+//              })
+//          }
+//      })
  })
 module.exports=router;

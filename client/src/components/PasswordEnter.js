@@ -42,7 +42,9 @@ console.log('password correct')
                         break;
                         case 'adminBranch':{
                              //go to adminBranch dashboard
-                             console.log('this is adminBranch Dashboard')
+                             console.log('this is adminBranch Dashboard');
+                             this.props.history.push('/adminBranch/dashboard');
+
         
                         }
                         break;
@@ -110,8 +112,7 @@ console.log('password correct')
                     </form>
                     <br/>
                     <hr/>
-                    <Link to="/login/forgotPassword">کلمه عبور را فراموش کردم</Link>
-
+ 
 
                     </section> 
 

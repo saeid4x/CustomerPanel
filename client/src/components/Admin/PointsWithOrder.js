@@ -32,6 +32,7 @@ export default class extends Component{
 
 
         console.log("form data=",formData);
+        window.location.href=Keys.frontendUrl+"/admin/pointsWithOrder"
     }
     componentDidMount(){
         axios.get(Keys.backendUrl+'api/admin/getBasePoint')

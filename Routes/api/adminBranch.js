@@ -3,8 +3,9 @@ var express=require('express'),
 var orderModel=require('../../Models/orders');
 var userModel=require('../../Models/users');
 var pointModel=require('../../Models/points');
-var pointModel=require('../../Models/points');
-var profileModel=require('../../Models/profile');
+ var profileModel=require('../../Models/profile');
+ var branchModel=require('../../Models/branch');
+ 
 
 var TestModel=require('../../Models/Test');
 var Keys=require('../../config/keys')
@@ -19,6 +20,15 @@ var Helper=require('../../Controller/Helper')
 router.get('/',(req,res)=>{
     res.send('api- admin branch')
 })
+
+ router.get('/getBranchInfo/:adminBranch',(req,res)=>{
+branchModel.findOne({adminBranch:req.params.adminBranch})
+    .then((data)=>{
+        if(data){
+            res.json(data)
+        }
+    })
+ })
 
 router.post('/order/findOrAddUser',(req,res)=>{
     let mobile=req.body.mobile;
@@ -118,6 +128,8 @@ router.get('/getPointDefinition',(req,res)=>{
             }
         })
 })
+
+
 router.get('/:userID/getTotalPoints',(req,res)=>{
     // let userID=req.params.userID;
     let userID='user120';
@@ -133,6 +145,40 @@ router.get('/:userID/getTotalPoints',(req,res)=>{
       });
 })
 
+
+
+//get dashboard info
+router.get('/:branchID/getDashboardInfo',(req,res)=>{    
+    //get count of order based-branchID
+    //get sum of orders based-branchID
+   var test= orderModel.aggregate([
+      {$match:{branchID:req.params.branchID}} ,
+      {$group:{_id:"$branchID",count:{$sum:1},totalPrice:{$sum:'$orderPrice'}}}
+    ]).exec((err,loc)=>{
+        loc.map(item=>{
+         res.json({totalPrice:item.totalPrice,count:item.count});
+        })
+        
+    });
+
+
+})
+
+//get count customers of one branch
+router.get('/:branchID/countOfCustomer',(req,res)=>{
+    orderModel.aggregate([
+        {$match:{branchID:'branchID 20'}},   
+        {$group:{_id:'$userID'}},      
+          {$count:'customerCount'}
+     ]).exec((err,loc)=>{
+         console.log(loc)
+         loc.map(item=>{
+            res.json({customerCount:item.customerCount})
+         })
+    
+        //  res.json(loc)
+     })
+})
 router.get('/:user/profile',(req,res)=>{
     profileModel.findOne({userID:req.params.userID})
         .then((data)=>{
@@ -145,28 +191,19 @@ router.get('/:user/profile',(req,res)=>{
 
 
  
-router.get('/test/calc1',(req,res)=>{
- 
+router.get('/test/5',(req,res)=>{
+ orderModel.aggregate([
+    {$match:{branchID:'branchID 20'}},   
+    {$group:{_id:'$userID'}},      
+      {$count:'customerCount'}
+ ]).exec((err,loc)=>{
+     console.log(loc)
+     loc.map(item=>{
+        //  console.log(item.)
+     })
 
-    
-    // new TestModel({
-    //     name:'saeid 5',
-    //     date:'1370/6/02',
-    //     goods:'mobile 41'
-    // }).save((err,data)=>{
-    //     if(data){
-    //         console.log(data);
-    //         res.json(data);
-    //     }})
-       
-
-    //     }
-    //     else{
-    //         console.log(err);
-    //         res.json(data);
-    //     }
-    // });
-
+    //  res.json(loc)
+ })
     
 })
 router.get('/test/20',(req,res)=>{

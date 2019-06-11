@@ -3,7 +3,8 @@
     width:220px;
     height: 100%;
     float: right;
-    background-color: #512da8
+    background-color: #512da8;
+    color:white
 }
 .customerSideNav-avatar{
     /* border:1px solid greenyellow; */

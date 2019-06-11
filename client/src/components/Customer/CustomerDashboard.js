@@ -16,14 +16,17 @@ export default class extends Component{
         totalOredr:null,
         countOrder:null,
         totalPoint:null,
+        username:null,
+        roleUser:null,
     }
+
 componentDidMount(){
     if(localStorage.getItem('mobile')=='null'){
         this.props.history.push('/login')
     }
-    let userID=localStorage.getItem('userID')
+    let userID=localStorage.getItem('userID');
     
-    Axios.get(Keys.backendUrl+'api/Customer/'+userID+'/orders/totalPriceAndCountOrder')
+    Axios.get(Keys.backendUrl+'api/customer/'+userID+'/orders/totalPriceAndCountOrder')
         .then((data)=>{
             if(data){
                 this.setState({
@@ -34,13 +37,9 @@ componentDidMount(){
                 })
                  
             }
-        });
-
-        Axios.get()
-
-
-
-
+        }).then(()=>{
+           
+})
 }
     render(){
         return(

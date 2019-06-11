@@ -16,9 +16,9 @@ export default class extends Component{
  
                 <ul class="list-group">
                     <li class="list-group-item active"> <center> ورود به حساب </center></li>
-                    <li class="list-group-item"><Link to="/login">ورود مشتری </Link></li>
-                    <li class="list-group-item"><Link to="/adminBranch/addUser">ورود مدیر شعبه </Link></li>
-                    <li class="list-group-item"> <Link to="">ورود مدیر </Link></li>
+                    <li class="list-group-item"><Link to="/login">    ورود کاربر  </Link></li>
+                    {/* <li class="list-group-item"><Link to="/adminBranch/addUser">ورود مدیر شعبه </Link></li>
+                    <li class="list-group-item"> <Link to="">ورود مدیر </Link></li> */}
                      
                 </ul>
 

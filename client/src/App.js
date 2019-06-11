@@ -1,9 +1,6 @@
 import React from 'react';
  import {BrowserRouter as Router , Route ,Switch} from 'react-router-dom';
-//  import PG from './components/test/PG';
- 
-// import TestLayout from './components/test/TestLayout';
-// import DateTime from './components/test/DateTime';
+import "./StaticFiles/css/Style.css"
 import HomePage from './components/HomePage';
 import Login from './components/Login';
 import PasswordEnter from './components/PasswordEnter';
@@ -19,7 +16,7 @@ import PointsOrderOtherBranch from './components/Admin/PointsWithOrderFromOtherB
 import LotteryOption from './components/Admin/LotteryOption';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import ReportOrderFromBranch from './components/Admin/ReportOrderFromBranch';
-import ReportComplete from './components/Admin/ReportComplete';
+ 
 import ReportsOption from './components/Admin/ReportsOption';
 import AddOrder from './components/Admin_Branch/AddOrder';
 import AddUser from './components/Admin_Branch/AddUser'
@@ -80,15 +77,16 @@ function App() {
           <Route  path="/admin/lotteryOption" component={LotteryOption} />
           <Route  path="/admin/dashboard" component={AdminDashboard} />
           <Route  path="/admin/report/OrderFromBranch" component={ReportOrderFromBranch} />
-          <Route  path="/admin/report/complete" component={ReportComplete} />
+          {/* <Route  path="/admin/report/complete" component={ReportComplete} /> */}
           <Route exact path="/admin/report" component={ReportsOption} />
 
-          <Route exact path="/adminBranch/addOrder/:userID/:userMobile" component={AddOrder} />
+          <Route exact path="/adminBranch/addOrder" component={AddOrder} />
           <Route exact path="/adminBranch/addUser" component={AddUser} />
           <Route exact path="/adminBranch/dashboard" component={AdminBranchDashboard} />
 
           <Route path="/test" component={AdminBranchDashboard}/>
           <Route path="/test2" component={CustomerDashboard}/>
+          <Route path="/test3" component={AdminDashboard}/>
           {/* <Route path="/test3" component={DateTime}/> */}
            
         </Switch>

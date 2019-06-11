@@ -4,6 +4,7 @@ import Keys from '../../config/keys';
 import axios from 'axios';
 import Header from '../General/Header';
 import SideNav from './SideNav';
+import Helper from '../../Controller/Helper'
 
 
 export default class extends Component{
@@ -16,12 +17,9 @@ export default class extends Component{
         minPointForMontlyLottery:null,
         minPointForYearlyLottery:null,
         prevPoint:null,
-        userProfile:{
-            name:null,
-            family:null,
-            userMobile:this.props.match.params.userMobile
-        },
-
+        name:null,
+        family:null,
+        customerMobile:localStorage.getItem('customerMobile'),
 
 
     }
@@ -30,7 +28,7 @@ export default class extends Component{
         e.preventDefault();
 
         // let branchID:localStorage.getItem('branchID')
-        let userID='user120';
+        let userID=localStorage.getItem('userID');
         axios.get(Keys.backendUrl+'api/adminBranch/'+userID+'/getTotalPoints')
             .then((data)=>{
                 if(data){
@@ -47,19 +45,20 @@ export default class extends Component{
 
 
                 let formData={
-                    userID:this.props.match.params.userID,
+                    userID:localStorage.getItem('userID'),
                     orderName:this.orderName.value,
                     orderPrice:this.orderPrice.value,
-                    branchID:'5cf7a931e8055f1434b94a50',
+                    branchID:localStorage.getItem('currentBranchID'),
                     orderPoint:PointThisOrder
                 }
 
                 axios.post(Keys.backendUrl+'api/adminBranch/order/addOrder',formData)
                     .then((data)=>{
                         if(data){
-                            console.log(data.data)
+                            console.log(data.data);
+                           
                         }
-                    });
+                    }) 
 
           //set user to lottery table
            if(newPoint >= this.state.minPointForMontlyLottery){
@@ -97,8 +96,8 @@ export default class extends Component{
             //         }//end if
             //     })
  
-       
-        
+        window.location.href=Keys.frontendUrl+"/adminBranch/addOrder"
+  
     }
    
   componentWillMount(){
@@ -120,23 +119,26 @@ export default class extends Component{
 
 
 
-        let userID=this.props.match.params.userID;
-        axios.get(Keys.backendUrl+'api/'+userID+'/profile')
+        // let userID=this.props.match.params.userID;
+        let userID=localStorage.getItem('customerID')
+        axios.get(Keys.backendUrl+'api/customer/'+userID+'/getProfile')
             .then((data)=>{
+
                 if(data){
+                    console.log('6060',data.data.name)
                     this.setState({
-                        uesrProfile:{
-                            name:data.data.name,
+                        name:data.data.name,
                             family:data.data.family
-                        }
                     })
                 }
+            }).then(()=>{
+                console.log('5050',this.state.name)
             })
         console.log(userID);
         axios.get(Keys.backendUrl+'api/adminBranch/order/getDetailsOrder/'+userID)
             .then((data)=>{
                 if(data){
-                    // console.log(data.data);
+                    console.log('808080',data.data);
                     this.setState({
                         ordersUser:data.data
                     })
@@ -154,9 +156,10 @@ export default class extends Component{
                         <td>  {fieldNumber++} </td>
                         <td>    {item.orderName}  </td>
                         <td>   {item.orderPrice} </td>
-                        <td>  {item.userID} </td>   
-                        <td>  {item.branchID} </td>
-                        <td>  {item.orderDate}  </td>
+                        <td>  {localStorage.getItem('customerMobile')} </td>   
+                        <td>  {item.branchName} </td>
+                        <td> {`${Helper.ToShamsi(Helper.MilisecondToMiladi( item.orderDate ))}`} </td>
+
                         <td> {item.orderTime} </td>
                     </tr>
 
@@ -171,9 +174,9 @@ export default class extends Component{
                  
                     <ul class="list-group addOrder-customerInfo">
                         <li class="list-group-item active">مشخصات مشتری</li>
-                        <li class="list-group-item"> نام = {this.state.userProfile.name}</li>
-                        <li class="list-group-item"> نام خانوادگی = {this.state.userProfile.family}</li>
-                        <li class="list-group-item">  موبایل مشتری   = {this.state.userProfile.userMobile}</li>
+                        <li class="list-group-item"> نام = {this.state.name}</li>
+                        <li class="list-group-item"> نام خانوادگی = {this.state.family}</li>
+                        <li class="list-group-item">  موبایل مشتری   = {this.state.customerMobile}</li>
                       
                 </ul>
                     {/* *********** */}
@@ -182,17 +185,17 @@ export default class extends Component{
                    
                 </section>
 <hr className="addOrder-hr"/>
-                <section className="addOrder-add container">
+                <section className="addOrder-add">
               <center>  <h4>وارد کردن کالا</h4></center>
                     <form onSubmit={this.handleSubmit}>
                         <section className="addOrder-add"></section>
                         <div className="form-group">                            
                             <label htmlFor="orderName">نام کالا </label>
-                            <input type="text" id="orderName" className="form-control" ref={(input)=>{this.orderName=input}}/>
+                            <input type="text" id="orderName"   className="form-control" ref={(input)=>{this.orderName=input}}/>
                         </div>
                         <div className="form-group">                            
-                            <label htmlFor="orderPrice">نام کالا </label>
-                            <input type="text" id="orderPrice" className="form-control"  ref={(input)=>{this.orderPrice=input}}/>
+                            <label htmlFor="orderPrice">قیمت کالا </label>
+                            <input type="text" id="orderPrice" className="form-control"   ref={(input)=>{this.orderPrice=input}}/>
                         </div>
                         <button className="btn btn-primary" type="submit">افزودن</button>
                     </form>

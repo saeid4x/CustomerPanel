@@ -6,6 +6,9 @@ import {
   DatePicker, 
   DateRangePicker,     
 } from "react-advance-jalaali-datepicker";
+import Header from '../General/Header';
+import SideNav from './SideNav'
+import "../../StaticFiles/css/Admin/ReportOrderOtherBranch.css";
 
 
 export default class extends Component {
@@ -14,7 +17,9 @@ state={
   fromDate:null,
   toDate:null,
    branchInfo:[],
-   selectBranch:null
+   selectBranch:null,
+   orderInfo:[],
+   showTable:'none'
 }
 
   DatePickerInput(props) {
@@ -40,17 +45,17 @@ changeTimeDate=(unix,formatted)=>{
 
     let formData={
       branchID:this.selectBranch.value,
-      fromDate:this.state.value,
-      toDate:this.state.value
+      fromDate:this.state.fromDate,
+      toDate:this.state.toDate
      }
-     axios.post(Keys.backendUrl+'api/admin/report/orderBranch/'+formData.branchID
-      +'/'+formData.fromDate+'/'+formData.toDate)
+     axios.post(Keys.backendUrl+'api/admin/report/orderBranch/',formData)
         .then((data)=>{
-          console.log(data.data)
+          this.setState({
+            orderInfo:data.data,
+            showTable:'block'
+          })
         })
-
-
-     console.log(formData)
+ 
   }
 
 componentDidMount(){
@@ -87,27 +92,30 @@ componentDidMount(){
 //    ):null;
 
 
-  //  let number=0;
-  //  let tableInfo=this.state.data.length ? (
-  //      this.state.data.map(item=>(
-  //          <tr>
-  //                  <td> {number+1} </td>
-  //                  <td>{item.orderName } </td>
-  //                  <td>{item.orderPrice} </td>
-  //                  <td> {item.branchName} </td>
-  //                  <td>  {item.orderDate}  </td>
-  //                  <td>  {item.orderTime}  </td>
-  //                  <td>  {item.orderPoint}  </td>
-  //          </tr>
-  //      ))
-  //  ):null;
+   let number=0;
+   let tableInfo=this.state.orderInfo.length ? (
+       this.state.orderInfo.map(item=>(
+           <tr>
+                   <td> {number+1} </td>
+                   <td>{item.orderName } </td>
+                   <td>{item.orderPrice} </td>
+                   <td> {item.branchName} </td>
+                   <td>  {item.orderDate}  </td>
+                   <td>  {item.orderTime}  </td>
+                   <td>  {item.orderPoint}  </td>
+           </tr>
+       ))
+   ):null;
    
     
     return(
-        <section className="ReportBranchSpec container">
+        <section className="ReportBranchSpec">
+          <Header/>
+          <SideNav/>
+      <section className="ReportBranchSpec-content">
 
-
-            <h2>گزارش خرید از شعبه های مختلف </h2>
+<center>
+            <h2>گزارش خرید از شعبه های مختلف </h2></center>
             <hr/>
             <form onSubmit={this.handleSubmit}>
             <div className="form-group">
@@ -117,9 +125,9 @@ componentDidMount(){
                 </select>
 
             </div>
-            <br/>
+            
             <div className="form-group">
-                <h3>تاریخ</h3>
+                <h3 style={{float:'right'}}>تاریخ</h3><br/><br/>
 
                 <DateRangePicker
                     placeholderStart="تاریخ شروع"
@@ -132,15 +140,19 @@ componentDidMount(){
                />
                 
             </div>
-            <button type="submit" className="btn btn-primary">تایید</button>
+            <center>
+            <button type="submit" className="btn btn-primary" >تایید</button>
+            </center>
 
             </form>
             <hr/>
-            <div>
-                <h4 style={{color:'green'}}>date from {this.state.fromDate} to {this.state.toDate}</h4>
+            <div className="ReportBranchSpec-dateSelect">
+
+                <h4 style={{color:'#4e342e'}}>  تاریخ از {this.state.fromDate} تا {this.state.toDate}</h4>
             </div>
             <hr/>
-            <table className="DetailsTable-table">
+            <section className="container " style={{display:`${this.state.showTable}`}}>
+            <table className=" table DetailsTable-table">
                 <tr>
                 <th> #</th>
                 <th>کالا </th>
@@ -150,11 +162,12 @@ componentDidMount(){
                 <th>   زمان</th>
                 <th> امتیاز  </th>
                 </tr>
-                {/* {tableInfo} */}
+                {tableInfo}
                 
             </table>
+            </section>
            
-
+            </section>
         </section>
     )
 }

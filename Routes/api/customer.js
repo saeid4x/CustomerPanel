@@ -3,9 +3,11 @@ var express=require('express'),
    var multer=require('multer');
 var profileModel=require('../../Models/profile');
 var orderModel=require('../../Models/orders');
+var userModel=require('../../Models/users');
 var lotteryUsersModel=require('../../Models/LotteryUsers');
-var path=require('path')
-var Helper=require('../../Controller/Helper')
+var path=require('path');
+var Helper=require('../../Controller/Helper');
+var Keys=require('../../config/keys')
 
 
   // <upload-multer>
@@ -41,13 +43,13 @@ router.post('/:userID/setProfile',upload.single('avatar_img'),(req,res)=>{
 
    let {name,family,age,address,gender}=req.body;
     let avatar=req.file.filename;
-    console.log(avatar)
+ 
    
    profileModel.findOneAndUpdate({userID:req.params.userID},{$set:{name,family,age,address,gender,avatar}},{upsert:true})
       .then((data)=>{
          if(data){
             // res.json(data)
-            res.redirect('http://127.0.0.1:3000/test')
+            res.redirect(Keys.frontendUrl+'/customer/dashboard')
             console.log(data);
            
 
@@ -182,7 +184,7 @@ router.post('/test3',(req,res)=>{
 })
 
 router.get('/:userID/orders/totalPriceAndCountOrder',(req,res)=>{
-   let userID='user120';
+   let userID=req.params.userID;
    var test= orderModel.aggregate([
       {$match:{userID:userID}} ,
       {$group:{_id:"$userID",count:{$sum:1},total:{$sum:'$orderPrice'},point:{$sum:'$orderPoint'}}} 
@@ -194,8 +196,23 @@ router.get('/:userID/orders/totalPriceAndCountOrder',(req,res)=>{
     });
 })
 
+router.get('/getUser/:userID',(req,res)=>{
+   userModel.findOne({_id:req.params.userID})
+      .then((data)=>{
+         if(data){
+            res.json(data);
+         }
+      })
+})
 
-
+router.get('/test5/:userID',(req,res)=>{
+   userModel.findOne({_id:req.params.userID})
+      .then((data)=>{
+         if(data){
+            res.json(data)
+         }
+      })
+})
 router.get('/test',(req,res)=>{
    new lotteryUsersModel({
       userID:'user120',

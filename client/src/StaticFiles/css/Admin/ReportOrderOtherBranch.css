@@ -1,0 +1,18 @@
+.ReportBranchSpec-content{
+    /* border:1px solid #9e9e9e; */
+    /* background-color: red; */
+    width: 80%;
+    float: left;
+    margin:5px 0 0 35px;
+    direction: rtl;
+}
+.ReportBranchSpec-content label{
+    float: right;
+}
+.ReportBranchSpec-dateSelect{
+    direction: rtl;
+    text-align: center
+}
+.DetailsTable-table{
+    width: 80%;
+}

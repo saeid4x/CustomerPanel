@@ -8,7 +8,7 @@ export default class extends Component{
 
 
     state={
-
+        branchesInfo:[]
     }
     handleSubmit=(e)=>{
         e.preventDefault();
@@ -19,18 +19,40 @@ export default class extends Component{
             branchID:this.branchID.value
 
         }
+        console.log('form data',formData)
     // console.log('branch Name=',this.branchID.value)
         axios.post(Keys.backendUrl+'api/admin/addBranchAdmin',formData)
             .then((data)=>{
 
-            })
+            });
+
+            // window.location.href=Keys.frontendUrl+"/admin/addBranchAdmin"
 
 
 
 
     }
+    componentDidMount(){
+        axios.get(Keys.backendUrl+'api/admin/getBranches')
+        .then((data)=>{
+            if(data){
+                console.log(data.data)
+                this.setState({
+                    branchesInfo:data.data
+                })
+            }
+        })
+    }
 
     render(){
+        let branchData=this.state.branchesInfo.length ?(
+            this.state.branchesInfo.map(item=>(
+                <option value={item._id}>
+                    {item.branchName}
+
+                </option>
+            ))
+        ):null;
         return(
             <section className="AddBranchAdmin">
                 <Header/>
@@ -42,8 +64,7 @@ export default class extends Component{
                 <div className="form-group">
                     <label htmlFor="branchID">نام شعبه</label>
                     <select name="branchID" className="form-control" ref={(val)=>{this.branchID=val}}>
-                        <option disabled selected>انتخاب شعبه</option>
-                        <option value="5cf7a931e8055f1434b94a50">شعبه 1</option>
+                    {branchData}
                     </select>
                 </div>
                     <div  className="form-group">

@@ -8,6 +8,7 @@ import {
     DateRangePicker,     
   } from "react-advance-jalaali-datepicker";
 import Header from '../General/Header';
+import Helper from '../../Controller/Helper'
  
 
 
@@ -98,7 +99,8 @@ export default class extends Component{
                        <td>{item.orderName } </td>
                        <td>{item.orderPrice} </td>
                        <td> {item.branchName} </td>
-                       <td>  {item.orderDate}  </td>
+                       <td> {`${Helper.ToShamsi(Helper.MilisecondToMiladi( item.orderDate ))}`} </td>
+                       
                        <td>  {item.orderTime}  </td>
                        <td>  {item.orderPoint}  </td>
                </tr>

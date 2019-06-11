@@ -6,6 +6,9 @@ import Header from '../General/Header';
 import "../../StaticFiles/css/Admin/AddBranch.css"
 
 export default class extends Component{
+    state={
+        branchesInfo:[]
+    }
 
     handleSubmit=(e)=>{
         e.preventDefault();
@@ -23,10 +26,29 @@ export default class extends Component{
                
             });
         
-          
-    }
+            window.location.href=Keys.frontendUrl+"/admin/addBranch"
 
+    }
+ componentDidMount(){
+   axios.get(Keys.backendUrl+'api/admin/getBranches')
+    .then((data)=>{
+        if(data){
+            console.log(data.data)
+            this.setState({
+                branchesInfo:data.data
+            })
+        }
+    })
+ }
     render(){
+        let branchData=this.state.branchesInfo.length ?(
+            this.state.branchesInfo.map(item=>(
+                <option value={item._id}>
+                    {item.branchName}
+
+                </option>
+            ))
+        ):null
         return(
             <section className="AddBranch">
                 <Header/>
@@ -39,7 +61,10 @@ export default class extends Component{
                 <form onSubmit={this.handleSubmit}>
                     <div  className="form-group">
                         <label htmlFor="branchName">نام شعبه</label>
-                        <input type="text" className="form-control" id="branchName" ref={(input)=>{this.branchName=input}}/>
+                        {/* <input type="text" className="form-control" id="branchName" ref={(input)=>{this.branchName=input}}/> */}
+                        <select name="" className="form-control" id="" ref={(input)=>{this.branchName=input}}>
+                        {branchData}
+                        </select>
                         
                     </div>
                      

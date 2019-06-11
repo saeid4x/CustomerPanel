@@ -1,19 +1,25 @@
 import React,{Component} from 'react';
 import {Link} from 'react-router-dom';
+import Header from '../General/Header';
+import SideNav from './SideNav';
+import "../../StaticFiles/css/Admin/ReportsOption.css"
+
 
 export default class extends Component{
 
     render(){
         return(
-            <section className="ReportsOption container">
-                <h1>گزارش ها</h1>
-                <hr/>
-                <ul>
-                    <li> <Link to="/admin/report/OrderFromBranch">گزارش  خرید از شعبه های مختلف  </Link></li>
-                    <li> <Link to="/admin/report/complete">  گزارش کامل </Link></li>
+            <section className="ReportsOption">
+                <Header/>
+                <SideNav/>
+                <section className="ReportsOption-content">
 
-                    </ul>
-
+                <ul class="list-group">
+                    <li class="list-group-item active"><center>گزارش ها </center></li>
+                    <li class="list-group-item"> <Link to="/admin/report/OrderFromBranch"> گزارش خرید از شعبه های مختلف</Link>    </li>
+                     
+                 </ul>
+                </section>
             </section>
         )
     }

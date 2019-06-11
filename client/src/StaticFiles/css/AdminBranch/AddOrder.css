@@ -1,5 +1,5 @@
 .addOrder{
-    border:2px solid green;
+    /* border:2px solid green; */
 }
 .addOrder-add{
     /* border:1px dashed purple; */
@@ -17,11 +17,15 @@
 .addOrder-customerInfo li{
     text-align: right;
     direction: rtl;
-    margin-top: 20px
+     
+    width: 85%;
+    margin:20px 0 0 100px
 
 }
 .addOrder-add{
     direction: rtl;
+    width: 75%;
+    margin-left:50px
 
 
 }
@@ -30,5 +34,11 @@
 
 }
 .addOrder-hr{
-    background-color:purple
+    background-color:purple;
+    width:70%;
+    margin-right:300px
+}
+.CompleteReport-table{
+    width: 80%;
+    margin: 0 210px 0 0 ;
 }
