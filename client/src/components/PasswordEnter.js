@@ -66,9 +66,6 @@ console.log('password correct')
     componentDidMount(){
         // get user info
 
-
-
-
         let userID=localStorage.getItem('userID');
         // let userID='5cf530279030f728d493f0f5';
         axios.get(Keys.backendUrl+"api/"+userID+'/getUser')

@@ -156,7 +156,7 @@ export default class extends Component{
                      //    generate verifyCode
                          var verifyCode;
                          Axios.get(Keys.backendUrl+'api/generateVerifyCode')
-                             .then((res)=>res.json())
+                              
                              .then((data)=>{
                                  if(data.data && typeof data.data==Number){
                                      verifyCode=data.data;
