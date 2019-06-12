@@ -26,7 +26,7 @@ export default class extends Component{
                
             });
         
-            window.location.href=Keys.frontendUrl+"/admin/addBranch"
+            window.location.href="https://project-customer.herokuapp.com/admin/addBranch"
 
     }
  componentDidMount(){
@@ -61,10 +61,11 @@ export default class extends Component{
                 <form onSubmit={this.handleSubmit}>
                     <div  className="form-group">
                         <label htmlFor="branchName">نام شعبه</label>
-                        {/* <input type="text" className="form-control" id="branchName" ref={(input)=>{this.branchName=input}}/> */}
-                        <select name="" className="form-control" id="" ref={(input)=>{this.branchName=input}}>
+                        <input type="text" className="form-control" id="branchName" ref={(input)=>{this.branchName=input}}/>
+                        {/* <select name="" className="form-control" id="" ref={(input)=>{this.branchName=input}}>
                         {branchData}
-                        </select>
+                        </select> */}
+                    
                         
                     </div>
                      
