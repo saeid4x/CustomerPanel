@@ -31,7 +31,8 @@ export default class extends Component{
     logout=(e)=>{
         localStorage.removeItem('mobile');
         localStorage.removeItem('userID');
-        window.location.href = "http://127.0.0.1:3000/login";
+        localStorage.removeItem('roleUser');
+        window.location.href = "https://project-customer.herokuapp.com";
     }
     render(){
         return(
