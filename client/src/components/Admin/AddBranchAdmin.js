@@ -24,6 +24,8 @@ export default class extends Component{
         axios.post(Keys.backendUrl+'api/admin/addBranchAdmin',formData)
             .then((data)=>{
 
+            }).then(()=>{
+                alert('ثبت موفقیت آمیز');
             });
 
             // window.location.href=Keys.frontendUrl+"/admin/addBranchAdmin"
