@@ -8,7 +8,7 @@ export default {
         
     },
     minPasswordLength:5,
-    frontendUrl:'http://127.0.0.1:3000',
+    frontendUrl:'https://project-customer.herokuapp.com/',
 
 
     
