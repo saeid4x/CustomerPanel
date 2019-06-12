@@ -96,7 +96,7 @@ export default class extends Component{
             //         }//end if
             //     })
  
-        window.location.href=Keys.frontendUrl+"/adminBranch/addOrder"
+        window.location.href=Keys.frontendUrl+"adminBranch/addOrder"
   
     }
    
