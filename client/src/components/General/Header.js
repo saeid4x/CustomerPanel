@@ -29,10 +29,14 @@ export default class extends Component{
     
     }
     logout=(e)=>{
-        localStorage.removeItem('mobile');
-        localStorage.removeItem('userID');
-        localStorage.removeItem('roleUser');
+
+        localStorage.clear();
+        // localStorage.removeItem('mobile');
+        // localStorage.removeItem('userID');
+        // localStorage.removeItem('roleUser');
+        
         window.location.href = "https://project-customer.herokuapp.com";
+
     }
     render(){
         return(
