@@ -1,5 +1,5 @@
 export default {
-    backendUrl:'https://project-customer.herokuapp.com/',
+    backendUrl:'http://127.0.0.1:8000/',
     pattern:{
         email:/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
         mobile:/^09\d{9}$/,

@@ -270,7 +270,7 @@ router.get('/test',(req,res)=>{
     isVerifiedMobile:1,
     accountStatus:'active',
     roleUser:'admin',
-    mobile:'09120000001',
+    mobile:'09120000002',
 
     email:'test@admin.com',  
     dateCreated:20,

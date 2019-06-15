@@ -119,7 +119,11 @@ export default class extends Component{
     }
 componentDidMount(){
 let code=sessionStorage.getItem('verifyCode');
-    alert()
+this.setState({
+    verifyCode:code
+})
+    alert('code='+code)
+let mobile=localStorage.getItem('mobile');
 
     //  Axios.get(Keys.backendUrl+'api/getUser/'+localStorage.getItem('mobile'))
     //     .then((data)=>{
