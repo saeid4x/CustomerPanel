@@ -11,7 +11,7 @@ export default class extends Component{
     
     state={
         mobile:null,
-        verifyCode:null,
+        verifyCode:sessionStorage.getItem('verifyCode'),
         password:null,
         isFillCompleteRegistration:null,
         changeAccountStatus:false,
@@ -122,6 +122,7 @@ componentDidMount(){
      Axios.get(Keys.backendUrl+'api/getUser/'+localStorage.getItem('mobile'))
         .then((data)=>{
             if(data.data){
+                 
                 console.log('@200',data.data.verifyCode);
                 this.setState({
                     verifyCode:data.data.verifyCode

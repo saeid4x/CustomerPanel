@@ -33,7 +33,7 @@ var upload=multer({
       mongoose = require("mongoose");
       var url='mongodb://127.0.0.1:27017/customerClub';
      var urlCloud='mongodb+srv://saeid:saeid123@cluster0-z7vca.mongodb.net/test?retryWrites=true&w=majority'
-  mongoose.connect(urlCloud,{useNewUrlParser:true},(err,success)=>{
+  mongoose.connect(url,{useNewUrlParser:true},(err,success)=>{
     if(err){
       console.log('error coonnect to database=',err);
     }
@@ -84,8 +84,8 @@ router.get('/generateVerifyCode',(req,res)=>{
 });
 
 
-router.post('/getUser',(req,res)=>{
-  console.log('mobile is =',req.body.mobile)
+router.post('/getUser/:mobile',(req,res)=>{
+  console.log('mobile is =',req.params.mobile)
 
   userModel.findOne({mobile:req.body.mobile}).then((data,err)=>{
     if(data){

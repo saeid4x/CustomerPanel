@@ -109,7 +109,8 @@ export default class extends Component{
                          Axios.get(Keys.backendUrl+'api/generateVerifyCode')
                               
                              .then((data)=>{
-                                 console.log('@001',data.data)
+                                 console.log('@001',data.data);
+                                sessionStorage.setItem('verifyCode',data.data)
                                  this.setState({
                                      verifyCode:data.data
                                  })
@@ -122,7 +123,7 @@ export default class extends Component{
                                      mobile:localStorage.getItem('mobile'),
                                      verifyCode:this.state.verifyCode
                                  }
-                                 Axios.post(Keys.backendUrl+'api/assignVerifyCodeToUser',{data});
+                                 Axios.post(Keys.backendUrl+'api/assignVerifyCodeToUser',data);
                                  
                                    
 
