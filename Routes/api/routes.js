@@ -263,9 +263,26 @@ router.get('/removeUser/:mobile',(req,res)=>{
 //test  routes
 
 router.get('/test',(req,res)=>{
-  // // let dateCreated=new Date().getFullYear()+'/'+new Date().getMonth()+'/'+new Date().getDate()
-  // let date=new Date();
-  // let time=date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
-  // res.json(time)
+ 
+  new userModel({
+    password:123, 
+    verifyCode:null,
+    isVerifiedMobile:1,
+    accountStatus:'active',
+    roleUser:'admin',
+    mobile:'09120000001',
+
+    email:'test@admin.com',  
+    dateCreated:20,
+    timeCreated:0,
+    isFillCompleteRegistration:0
+  }).save((err,data)=>{
+    if(data){
+      res.json(data)
+    }
+    if(err){
+      res.json(err)
+    }
+  })
 })
 module.exports=router;

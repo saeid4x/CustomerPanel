@@ -11,7 +11,7 @@ export default class extends Component{
     
     state={
         mobile:null,
-        verifyCode:sessionStorage.getItem('verifyCode'),
+        verifyCode:null,
         password:null,
         isFillCompleteRegistration:null,
         changeAccountStatus:false,
@@ -118,22 +118,24 @@ export default class extends Component{
 
     }
 componentDidMount(){
+let code=sessionStorage.getItem('verifyCode');
+    alert()
 
-     Axios.get(Keys.backendUrl+'api/getUser/'+localStorage.getItem('mobile'))
-        .then((data)=>{
-            if(data.data){
+    //  Axios.get(Keys.backendUrl+'api/getUser/'+localStorage.getItem('mobile'))
+    //     .then((data)=>{
+    //         if(data.data){
                  
-                console.log('@200',data.data.verifyCode);
-                this.setState({
-                    verifyCode:data.data.verifyCode
-                })
-            }
-            else if(data.data.err){
-                console.log('@200','somethis wrong')
-            }
-        }).then(()=>{
-            alert('code='+this.state.verifyCode);
-        })
+    //             console.log('@200',data.data.verifyCode);
+    //             this.setState({
+    //                 verifyCode:data.data.verifyCode
+    //             })
+    //         }
+    //         else if(data.data.err){
+    //             console.log('@200','somethis wrong')
+    //         }
+    //     }).then(()=>{
+    //         alert('code='+this.state.verifyCode);
+    //     })
     
     
     // let data={mobile:localStorage.getItem('mobile')}

@@ -31,6 +31,7 @@ export default class extends Component{
     logout=(e)=>{
 
         localStorage.clear();
+        sessionStorage.clear();
         // localStorage.removeItem('mobile');
         // localStorage.removeItem('userID');
         // localStorage.removeItem('roleUser');
