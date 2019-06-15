@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+ 
 
 
 export default class extends Component{
@@ -36,7 +37,7 @@ export default class extends Component{
         // localStorage.removeItem('userID');
         // localStorage.removeItem('roleUser');
         
-        window.location.href = "https://project-customer.herokuapp.com";
+        window.location.href = 'https://project-node20.herokuapp.com/'
 
     }
     render(){
