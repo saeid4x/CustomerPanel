@@ -14,8 +14,7 @@ export default class extends Component{
                 <ul class="list-group">
                 <li class="list-group-item active"> <center>صفحه تنظیمات</center></li>
                     <li class="list-group-item "><Link to="/admin/pointsWithOrder">امتیازدهی بر اساس میزان خرید</Link></li>
-                    <li class="list-group-item "><Link to="/admin/pointsOrderOtherBranch"> امتیازدهی بر اساس خرید از شعبه</Link></li>
-                    <li class="list-group-item "><Link to="/admin/lotteryOption">  تنظیمات قرعه کشی</Link></li>
+                    {/* <li class="list-group-item "><Link to="/admin/lotteryOption">  تنظیمات قرعه کشی</Link></li> */}
                
                    
                    

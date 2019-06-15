@@ -17,6 +17,7 @@ export default class extends Component{
         minPointForMontlyLottery:null,
         minPointForYearlyLottery:null,
         prevPoint:null,
+        finalPoint:null,
         name:null,
         family:null,
         customerMobile:localStorage.getItem('customerMobile'),
@@ -27,77 +28,91 @@ export default class extends Component{
     handleSubmit=(e)=>{
         e.preventDefault();
 
-        // let branchID:localStorage.getItem('branchID')
-        let userID=localStorage.getItem('userID');
-        axios.get(Keys.backendUrl+'api/adminBranch/'+userID+'/getTotalPoints')
+         /*
+         // 1--> get Prev point
+         //2-->insert order for customer
+         //3--> insert customer to correct lottery(if neccerily)
+
+
+         */
+
+        //  1--> get Prev point
+        let customerID=localStorage.getItem('customerID');
+        axios.get(Keys.backendUrl+'api/adminBranch/'+customerID+'/getTotalPoints')
             .then((data)=>{
                 if(data){
-                    // console.log('175',data.data.total);
+                    // console.log('175',data.data.totalPoint);
                     this.setState({
-                        prevPoint:data.data.total
+                        prevPoint:data.data.totalPoint
                     })
                 }
             }).then(()=>{
-                // console.log('176',this.state.prevPoint)
+                // console.log('176',this.state.prevPoint);
+                //caculate orderPoint and insert order for Customer
 
                 let PointThisOrder=Math.floor((this.orderPrice.value / this.state.basePrice)) * this.state.basePoint;
-                let newPoint=this.state.prevPoint + PointThisOrder;
-
-
+                var finalPoint=this.state.prevPoint + PointThisOrder;
+                let customerID=localStorage.getItem('customerID');
+                this.setState({
+                    finalPoint
+                })
                 let formData={
-                    userID:localStorage.getItem('userID'),
+                    customerID:localStorage.getItem('customerID'),
                     orderName:this.orderName.value,
                     orderPrice:this.orderPrice.value,
-                    branchID:localStorage.getItem('currentBranchID'),
+                    BranchID:localStorage.getItem('BranchID'),
+                    BranchName:localStorage.getItem('BranchName'),
                     orderPoint:PointThisOrder
                 }
+             
 
                 axios.post(Keys.backendUrl+'api/adminBranch/order/addOrder',formData)
                     .then((data)=>{
                         if(data){
-                            console.log(data.data);
+                            // console.log(data.data);
                            
                         }
-                    }) 
+                    }) .then(()=>{
+                        //insert customer to lottery table
+                        console.log('final point=',finalPoint);
+                        var lotteryType;
+                        var customerID=localStorage.getItem('customerID');
+                       
+                        if(this.state.finalPoint >= this.state.minPointForMontlyLottery && this.state.finalPoint <this.state.minPointForYearlyLottery ){
+                            //insert user to lottery collection
+                             lotteryType='montly';
+                          
+                        }
+                          if(this.state.finalPoint >= this.state.minPointForYearlyLottery){
+                             
+                              lotteryType='yearly'
+                           
+                        }
 
-          //set user to lottery table
-           if(newPoint >= this.state.minPointForMontlyLottery){
-               //insert user to lottery collection
-               let lotteryType='montly'
-               
-               axios.get(Keys.backendUrl+'api/adminBranch/'+userID+'/addToLottery/'+lotteryType)
-                .then((data)=>{
-                    console.log(data.data)
-                })
-               
+//****************************************************** */
+                        let data2={
+                            lotteryType,
+                            customerMobile:localStorage.getItem('customerMobile')
+                             
+                        }
+                        axios.post(Keys.backendUrl+'api/adminBranch/'+customerID+'/addToLottery',data2)
+                        .then((data)=>{
+                            if(data){
+                               console.log('@207',data.data);
+                               window.location.href=Keys.frontendUrl+"adminBranch/addOrder"
 
-           }
-           else if(newPoint >= this.state.minPointForYearlyLottery){
-               //insert user to lottery collection
-               //lotteryType='yearly'
-               let lotteryType='yearly'
-               
-               axios.get(Keys.backendUrl+'api/adminBranch/'+userID+'/addToLottery/'+lotteryType)
-                .then((data)=>{
-                    console.log(data.data)
-                })
-           }
-                
-
-            });  
-
-            // axios.post(Keys.backendUrl+'api/adminBranch/order/addOrder',formData)
-             
-            //     .then((data)=>{
-            //         if(data.data){
-            //             console.log(data.data);
-                        
-                    
-            //         }//end if
-            //     })
- 
-        window.location.href=Keys.frontendUrl+"adminBranch/addOrder"
-  
+                            }
+                            else{
+                                console.log('@207','no-data');
+                                window.location.href=Keys.frontendUrl+"adminBranch/addOrder"
+                            }
+                        }).then(()=>{
+                            window.location.href=Keys.frontendUrl+"adminBranch/addOrder"
+                        }).catch((err)=>{
+                            console.log(err)
+                        })
+                    })
+            });
     }
    
   componentWillMount(){
@@ -105,13 +120,15 @@ export default class extends Component{
         .then((data)=>{
             if(data){
                 this.setState({
-                    baseprice:data.data.basePrice,
+                    basePrice:data.data.basePrice,
                     basePoint:data.data.basePoint,
                     minPointForMontlyLottery:data.data.minPointForMontlyLottery,
                     minPointForYearlyLottery:data.data.minPointForYearlyLottery
 
                 })
             }
+        }).then(()=>{
+             
         })
   }
     componentDidMount(){
@@ -128,8 +145,10 @@ export default class extends Component{
                     console.log('6060',data.data.name)
                     this.setState({
                         name:data.data.name,
-                            family:data.data.family
+                            family:data.data.family,
                     })
+                    localStorage.setItem('customerName',data.data.name);
+                    localStorage.setItem('customerFamily',data.data.family);
                 }
             }).then(()=>{
                 console.log('5050',this.state.name)
@@ -211,7 +230,7 @@ export default class extends Component{
                 
 
                 <section className="addOrder-detailsOrder-table">
-                <table className=" table CompleteReport-table">
+                <table className=" table CompleteReport-table bg-primary">
                     <tr>
                     <th> #</th>
                     <th>کالا </th>                    

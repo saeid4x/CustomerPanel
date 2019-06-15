@@ -77,12 +77,13 @@ router.post('/checkActiveUser',upload.none(),(req,res)=>{
    
  
 router.get('/generateVerifyCode',(req,res)=>{
-  /* get mobile and generate verify code and initial that user with this code */
-
-  //generate verify code 
+  /*  generate verify code  */ 
+  
   let code=Helper.GenerateVerifyCode(10000,50000);
   res.json(code);
 });
+
+
 router.post('/getUser',(req,res)=>{
   console.log('mobile is =',req.body.mobile)
 
@@ -98,21 +99,79 @@ router.post('/getUser',(req,res)=>{
   
 });
 });
+
+ //get user info based-id
+ router.get('/:userID/getUser',(req,res)=>{
+  userModel.findOne({_id:req.params.userID})
+   .then((data)=>{
+     if(data){
+       res.json({userInfo:data});
+    
+     }else{
+       res.json({userInfo:null})
+     }
+   })
+})
+
+//get user based mobile
+ router.get('/getUser/:mobile',(req,res)=>{
+   let mobile=req.params.mobile;
+   userModel.findOne({mobile})
+    .then((data=>{
+      if(data){
+        res.json(data)
+      }
+      else{
+        new userModel({
+          mobile
+        }).save((err,doc)=>{
+          if(doc){
+            res.json(doc)
+          }
+          else if(err){
+            res.json({err:true})
+          }
+        })
+      }
+    }))
+ 
+ })
+
+ router.post('/assignVerifyCodeToUser',(req,res)=>{
+    let {mobile,verifyCode}=req.body;
+   userModel.findOneAndUpdate({mobile},{$set:{verifyCode}})
+    .then((data)=>{
+      if(data){
+        res.json(data);
+      }
+      else{
+        res.json({err})
+      }
+      
+    })
+ })
+
+ router.post('/test50',(req,res)=>{
+   res.json(req.body.accountStatus)
+ })
  router.post('/complateRegisteration',(req,res)=>{
    let dateCreated=Helper.MiladiToMilisecond(Helper.CurrentDate());
   let time=Helper.CurrentTime();
   let mobile=req.body.mobile;
+
   let newData={
     username: req.body.username,
     password:req.body.password, 
     verifyCode:null,
     isVerifiedMobile:1,
+    accountStatus:'active',
 
     email:req.body.email,  
     dateCreated:dateCreated,
     timeCreated:time,
     isFillCompleteRegistration:1
   };
+  console.log(newData)
   userModel.findOneAndUpdate({mobile:mobile},{$set:newData}
       , (err,doc)=>{
         if(doc){
@@ -126,28 +185,35 @@ router.post('/getUser',(req,res)=>{
       })
  })
 
- //get user info based-id
- router.get('/:userID/getUser',(req,res)=>{
-   userModel.findOne({_id:req.params.userID})
+router.post('/saveUser/:mobile/:roleUser',(req,res)=>{
+
+  let data={
+    mobile:req.params.mobile,
+    username:'null',
+    password:req.body.password,
+    isVerifiedMobile:0,
+    verifyCode:null,
+    email:'null',
+    roleUser:req.params.roleUser,
+    dateCreated:Helper.MiladiToMilisecond(Helper.CurrentDate()),
+    timeCreated:Helper.CurrentTime(),
+    accountStatus:'pending',
+    isFillCompleteRegistration:0
+  }
+
+  userModel.findOneAndUpdate({mobile:req.params.mobile},data,{upsert:true})
     .then((data)=>{
       if(data){
-        res.json({userInfo:data});
-      }else{
-        res.json({userInfo:null})
+        res.json(data);
       }
     })
- })
+  
+   
+  
 
- //get user based mobile
-  router.get('/getUser/:mobile',(req,res)=>{
-    userModel.findOne({mobile:req.params.mobile})
-      .then((data)=>{
 
-        res.json(data)
-      }).catch((err)=>{
-        res.json(err)
-      })
-  })
+
+})
  router.post('/changeAccountStatus',(req,res)=>{
    let accountStatus=req.body.accountStatus;
    let mobile=req.body.mobile;
@@ -166,7 +232,7 @@ router.post('/getUser',(req,res)=>{
    })
  })
 
- 
+// no-need 
 router.post('/initialUser',(req,res)=>{
   //update user
   new userModel({

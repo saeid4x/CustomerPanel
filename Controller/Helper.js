@@ -28,28 +28,43 @@ module.exports={
      
     CurrentDate:()=>{
         let date=new Date();
-      return date.getFullYear()+'/'+date.getMonth()+'/'+date.getDate();
+        let month=date.getMonth()+1
+      return date.getFullYear()+'/'+month+'/'+date.getDate();
         
     },
     CurrentTime:()=>{
         let date=new Date();
          return date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
     },
-    EndOfMonth:(date)=>{
-        let fullDate=new Date(date);
-        let day=fullDate.getDate()+29;
-        let Month=fullDate.getMonth()+1
-        let dateFormated=fullDate.getFullYear()+'/'+Month +'/'+day;
-        return dateFormated;
+    EndOfMonth:(myDate)=>{
+        let date=new Date(myDate);
+    // let FromDate=Helper.ToShamsi(Helper.MilisecondToMiladi(date));
 
+    //next Month
+   let currentMonth=date.getMonth();
+   let CurrentYear=date.getFullYear();
+   let CurrentDay=date.getDate();
+   let formatteddata=CurrentYear+'/'+currentMonth+'/'+CurrentDay;
+   date2=new Date(formatteddata);
+
+   //set next month
+    date2.setMonth(currentMonth+1);
+    return date2.getTime();
     },
-    EndOfYear:(date)=>{
-        let fullDate=new Date(date);
-          let newYeay=fullDate.getFullYear()+1;
-         let Month=fullDate.getMonth()+1
-        let dateFormated=newYeay+'/'+Month +'/'+fulldate.getDate();
-        return dateFormated;
-    }
+    EndOfYear:(myDate)=>{
+     //   let data=Helper.ToShamsi(Helper.MilisecondToMiladi(Helper.EndOfYear(Helper.ToMiladi('1398/5/10'))));
+
+        let date=new Date(myDate);
+        // let FromDate=Helper.ToShamsi(Helper.MilisecondToMiladi(date));
+     
+       let currentMonth=date.getMonth()+1;
+       let CurrentYear=date.getFullYear();
+       let CurrentDay=date.getDate();
+       let formatteddata=CurrentYear+'/'+currentMonth+'/'+CurrentDay;
+       date2=new Date(formatteddata);
+        date2.setFullYear(CurrentYear+1);
+        return date2.getTime();
+    },
     
      
 }

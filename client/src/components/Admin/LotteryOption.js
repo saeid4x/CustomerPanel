@@ -38,14 +38,14 @@ export default class extends Component{
               <center> <h5>قرعه کشی ماهیانه</h5> </center> 
                 <label for="montlyMinPoint">حداقل امتیاز</label><br/>
                 <input type="text" className="form-control"  name="montlyMinPoint" ref={(val)=>this.montlyMinPoint=val}/>
-                <span>یا داشتن  مجوز قرعه کشی ماهیانه</span>
+               
                 </div>
                 <br/>
                 <div className="form-group">
                     <center><h5>قرعه کشی سالیانه</h5></center>
                     <label for="minPoint">حداقل امتیاز</label><br/>
                 <input type="text" className="form-control"  name="yearlyMinPoint" ref={(val)=>this.yearlyMinPoint=val}/>
-                <span>یا داشتن  مجوز قرعه کشی سالیانه</span>
+              
                 </div>
                 <button type="submit" className="btn btn-primary">تایید</button>
                 </form>

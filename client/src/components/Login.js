@@ -16,12 +16,21 @@ export default class extends Component{
         super(props);
         // this.handleSubmit=this.handleSubmit.bind(this);
     }
-    state={
+   state={
         verifyCode:null,
         mobile:null,
         isExistUser:null,
         mobileErrorMsg:null
     }
+    /*
+    // <--get mobile number 
+
+    // --> [userID,isFormRegisterComplete, isVerify, roleUser]
+
+
+
+
+    */
 
     handleChange=(e)=>{
        if(!this.mobile.value){
@@ -46,14 +55,18 @@ export default class extends Component{
         if(this.mobile.value){
             if(Helper.validation(this.mobile.value,Keys.pattern.mobile)){
                 localStorage.setItem('mobile',this.mobile.value);
-                
+               
                 //******************************************* */
                 Axios.get(Keys.backendUrl+'api/getUser/'+this.mobile.value)
                     .then((data)=>{
                         if(data){
                             
-                            console.log('650',data.data)
+                            console.log('650',data.data);
+       // --> get [userID,isFormRegisterComplete, isVerify, roleUser]
                             localStorage.setItem('userID',data.data._id);
+                            localStorage.setItem('roleUser',data.data.roleUser);
+                            localStorage.setItem('isFormRegisterComplete',data.data.isFillCompleteRegistration);
+                            localStorage.setItem('isVerify',data.data.isVerifiedMobile);
                         }
                         else if(data.data.err){
                             console.log('650',data.data.err)
@@ -76,109 +89,123 @@ export default class extends Component{
                  }
                 //*******    */
          
-                //check exist user(mobile)
+                // check if verified mobile
                 Axios.post(Keys.backendUrl+'api/checkActiveUser',data)
                   
                  .then((data)=>{
+                     console.log('@00',data.data.status);
                      if(data.data.status == 'verify'){
+                         
                          //redirect user to password page
-                       
-                    //    this.props.history.push('/login/password/'+this.mobile.value);
-
-                       this.props.history.push('/login/password');
                          this.setState({
-                             isActiveUser:true
-                         })
+                            isActiveUser:true
+                        })
+                       this.props.history.push('/login/password');
+                     
                      }
-                     else if(data.data.status == 'no-user'){
+                     else if(data.data.status == 'no-verify'){
                          //generate verify code 
                         
                          Axios.get(Keys.backendUrl+'api/generateVerifyCode')
                               
                              .then((data)=>{
+                                 console.log('@001',data.data)
                                  this.setState({
                                      verifyCode:data.data
                                  })
-                                
+                                 this.props.history.push('/user/verifyCode')
+                                 
          
-                             })
-                             .then(()=>{
-                                 //initialize user 
+                             }).then(()=>{
+                                 //just assign verifyCode to user
                                  let data={
-                                     mobile:this.mobile.value,
+                                     mobile:localStorage.getItem('mobile'),
                                      verifyCode:this.state.verifyCode
                                  }
-                                 Axios.post(Keys.backendUrl+'api/initialUser',data)
-                                  
-                                   .then((data)=>{
-                                       if(data.data){
-                                         if(data.data.result){
-                                             //user succssfully initialed 
-                                             console.log('user successfuly initialed ',data.data.result._id);
-                                             localStorage.setItem('mobile',this.mobile.value);                                            //  localStorage.setItem('userID',data.data)
-                                             localStorage.setItem('userID',data.data.result._id);  
-                                                                                       //  localStorage.setItem('userID',data.data)
-                                             // localStorage.setItem('mobile',this.mobile.value)
-                                             //go to verifyCode Page
-                                          this.props.history.push(`/user/${this.mobile.value}/verifyCode`)
-         
-                                         }
-                                         else if( data.data.err){
-                                             //user initialize failed
-                                             console.log('user initialize failed');
-           
-                                         }
-                                         else{
-                                             console.log('initialiez user= not fetch');
-                                         }
-         
-                                       }
-                                      
-                                   })
+                                 Axios.post(Keys.backendUrl+'api/assignVerifyCodeToUser',{data});
+                                 
                                    
-                                   
-                                   .catch((err)=>{
-                                       console.log('something wrong with run fetch initial user',err)
-                                   })
+
                              })
+                            //  .then(()=>{
+                            //     //  //initialize user 
+                                 
+                            //     //  let data={
+                            //     //      mobile:this.mobile.value,
+                            //     //      verifyCode:this.state.verifyCode
+                            //     //  }
+                            //     //  Axios.post(Keys.backendUrl+'api/initialUser',data)
+                                  
+                            //     //    .then((data)=>{
+                            //     //        if(data.data){
+                            //     //          if(data.data.result){
+                            //     //              //user succssfully initialed 
+                            //     //              console.log('user successfuly initialed ',data.data.result._id);
+                            //     //              localStorage.setItem('mobile',this.mobile.value);                                            //  localStorage.setItem('userID',data.data)
+                            //     //              localStorage.setItem('userID',data.data.result._id);  
+                            //     //              //  localStorage.setItem('userID',data.data)
+                            //     //              // localStorage.setItem('mobile',this.mobile.value)
+                            //     //              //go to verifyCode Page
+                            //     //           this.props.history.push(`/user/${this.mobile.value}/verifyCode`)
+         
+                            //             //  }
+                            //             //  else if( data.data.err){
+                            //             //      //user initialize failed
+                            //             //      console.log('user initialize failed');
+           
+                            //             //  }
+                            //             //  else{
+                            //             //      console.log('initialiez user= not fetch');
+                            //             //  }
+         
+                            //     //        }
+                                      
+                            //     //    })
+                                   
+                                   
+                            //        .catch((err)=>{
+                            //            console.log('something wrong with run fetch initial user',err)
+                            //        })
+                            //  })
                          
          
                      }
-                     else if(data.data == 'no-verify'){
+                     else if(data.data.status == 'no-user'){
                          //go to verifyCode page
                          // localStorage.setItem('mobile',this.mobile.value)
-                        this.props.history.push(`/user/${this.mobile.value}/verifyCode`);
+                        this.props.history.push('/login');
          
          
                           
                      }
-                     else if(!data.data.result ){
-                     //    generate verifyCode
-                         var verifyCode;
-                         Axios.get(Keys.backendUrl+'api/generateVerifyCode')
+                    //  else if(!data.data.result ){
+                    //  //    generate verifyCode
+                    //      var verifyCode;
+                    //      Axios.get(Keys.backendUrl+'api/generateVerifyCode')
                               
-                             .then((data)=>{
-                                 if(data.data && typeof data.data==Number){
-                                     verifyCode=data.data;
-                                     console.log('verifyCode=',verifyCode);
+                    //          .then((data)=>{
+                    //              if(data.data && typeof data.data==Number){
+                    //                  verifyCode=data.data;
+                    //                 //  console.log('verifyCode=',verifyCode);
+
                                      
          
          
-                                 }
-                             }).then(()=>{
-                                 //initial user 
+                    //              }
+                    //          }).then(()=>{
+                    //              //initial user 
          
-                             }).then(()=>{
-                                 //check verifyCode user
-                             })
+                    //          }).then(()=>{
+                    //              //check verifyCode user
+                    //          })
          
-                         this.setState({
-                             isExistUser:false,
-                             mobileErrorMsg:null
+                    //      this.setState({
+                    //          isExistUser:false,
+                    //          mobileErrorMsg:null
 
-                         })
+                    //      })
          
-                     }
+                    //  }
                      
                  })
                  

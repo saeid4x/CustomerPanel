@@ -66,7 +66,7 @@ export default class extends Component{
                             isVerifiedMobile:1,
                             verifyCode:null
                         }
-                        console.log('900',data)
+                       
                         Axios.post(Keys.backendUrl+"api/"+'changeAccountStatus',data)
                        .then((data)=>{
                            if(data.data){
@@ -81,11 +81,11 @@ export default class extends Component{
         
                      
         
-                    if(this.state.isFillCompleteRegistration == 0){
+                    if(localStorage.getItem('isFormRegisterComplete') == 0){
                         //go to complete Registration
                         this.props.history.push('/user/register');
                     }
-                    else if(this.state.isFillCompleteRegistration == 1 && this.state.password){
+                    else if(localStorage.getItem('isFormRegisterComplete') == 1){
                         //go to password page
                         this.props.history.push('/login/password');
                     }
@@ -119,32 +119,46 @@ export default class extends Component{
     }
 componentDidMount(){
 
+     Axios.get(Keys.backendUrl+'api/getUser/'+localStorage.getItem('mobile'))
+        .then((data)=>{
+            if(data.data){
+                console.log('@200',data.data.verifyCode);
+                this.setState({
+                    verifyCode:data.data.verifyCode
+                })
+            }
+            else if(data.data.err){
+                console.log('@200','somethis wrong')
+            }
+        }).then(()=>{
+            alert('code='+this.state.verifyCode);
+        })
     
     
-    let data={mobile:localStorage.getItem('mobile')}
-     Axios.post(Keys.backendUrl+'api/getUser',data)
+    // let data={mobile:localStorage.getItem('mobile')}
+    //  Axios.post(Keys.backendUrl+'api/getUser',data)
       
-    .then((data)=>{
-        if(data){
-            console.log('3030=',data.data);
-            alert('code ='+data.data.verifyCode);
-        // localStorage.setItem('mobile',data.mobile);
-        localStorage.setItem('password',data.data.password)
-        localStorage.setItem('roleUser',data.data.roleUser);
+    // .then((data)=>{
+    //     if(data){
+    //         console.log('3030=',data.data);
+    //         alert('code ='+data.data.verifyCode);
+    //     // localStorage.setItem('mobile',data.mobile);
+    //     localStorage.setItem('password',data.data.password)
+    //     localStorage.setItem('roleUser',data.data.roleUser);
             
-            this.setState({
-                mobile:this.props.match.params.mobile,
-                verifyCode:data.data.verifyCode,
-                password:data.data.password,
-                isFillCompleteRegistration:data.data.isFillCompleteRegistration,
-            })
-        }else{
-            console.log('data not found');
-        }
+    //         this.setState({
+    //             mobile:this.props.match.params.mobile,
+    //             verifyCode:data.data.verifyCode,
+    //             password:data.data.password,
+    //             isFillCompleteRegistration:data.data.isFillCompleteRegistration,
+    //         })
+    //     }else{
+    //         console.log('data not found');
+    //     }
         
-    }).catch((err)=>{
-        console.log('error fetch',err);
-    });//end fetch
+    // }).catch((err)=>{
+    //     console.log('error fetch',err);
+    // });//end fetch
 
    
 }

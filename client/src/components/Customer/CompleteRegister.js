@@ -137,10 +137,12 @@ handleEmail=(e)=>{
                     username:this.username.value,
                     password:this.password.value,
                     mobile:this.state.mobile,                
-                    // passwordConfirm:this.passwordConfirm.value,
+                 
                     email:this.email.value,
-                    isFillCompleteRegistration:1
+                    isFillCompleteRegistration:1,
+                    accountStatus:"active"
                 }
+               console.log('hihihi',formData)
                 Axios.post(keys.backendUrl+'api/complateRegisteration',formData)
                     .then((data)=>{
                         if(data.data){
@@ -187,6 +189,7 @@ handleEmail=(e)=>{
  
     }
     componentDidMount(){
+         
         
         
     }

@@ -16,41 +16,48 @@ export default class extends Component {
 
     }
     componentWillMount(){
+      
+    }
+
+    componentDidMount(){
+
         let adminBranch=localStorage.getItem('userID');
         axios.get(Keys.backendUrl+'api/adminBranch/getBranchInfo/'+adminBranch)
             .then((data)=>{
                 if(data){
-                    localStorage.setItem('currentBranchName',data.data.branchName);
-                    localStorage.setItem('currentBranchID',data.data._id);
-                }
-            })
-
-    }
-
-    componentDidMount(){
-        //get branchID and fetch data based that identifier
-        let branchID='branchID 20';
-        axios.get(Keys.backendUrl+'api/adminBranch/'+branchID+'/getDashboardInfo')
-            .then((data)=>{
-                if(data.data){
-                    console.log(data.data);
-                    this.setState({
-                        countOfOrder:data.data.count,
-                        sumOfPrices:data.data.totalPrice,
-
-                    })
+                    localStorage.setItem('BranchName',data.data.branchName);
+                    localStorage.setItem('BranchID',data.data._id);
                 }
             }).then(()=>{
-                axios.get(Keys.backendUrl+'api/adminBranch/'+branchID+'/countOfCustomer')
-                    .then((data)=>{
-                        if(data.data){
-                            console.log('550',data.data.customerCount)
-                            this.setState({
-                                countOfCustomer:data.data.customerCount
-                            })
-                        }
-                    })
+                console.log('branchName=',localStorage.getItem('currentBranchName'))
+                console.log('branchID=',localStorage.getItem('BranchID'))
             })
+            
+
+        //get branchID and fetch data based that identifier
+        // let user='branchID 20';
+
+        // axios.get(Keys.backendUrl+'api/adminBranch/'+usrID+'/getDashboardInfo')
+        //     .then((data)=>{
+        //         if(data.data){
+        //             console.log(data.data);
+        //             this.setState({
+        //                 countOfOrder:data.data.count,
+        //                 sumOfPrices:data.data.totalPrice,
+
+        //             })
+        //         }
+        //     }).then(()=>{
+        //         axios.get(Keys.backendUrl+'api/adminBranch/'+branchID+'/countOfCustomer')
+        //             .then((data)=>{
+        //                 if(data.data){
+        //                     console.log('550',data.data.customerCount)
+        //                     this.setState({
+        //                         countOfCustomer:data.data.customerCount
+        //                     })
+        //                 }
+        //             })
+        //     })
         
     }
     render(){

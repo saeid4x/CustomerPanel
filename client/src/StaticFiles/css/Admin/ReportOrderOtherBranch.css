@@ -5,14 +5,22 @@
     float: left;
     margin:5px 0 0 35px;
     direction: rtl;
+   
 }
+ 
 .ReportBranchSpec-content label{
     float: right;
+   
 }
 .ReportBranchSpec-dateSelect{
     direction: rtl;
     text-align: center
 }
-.DetailsTable-table{
-    width: 80%;
+.admin-DetailsTable-table{
+    width: 70%;
+    border:1px solid white
+  
+}
+.admin-DetailsTable-table tr,th,td{
+    border:1px solid white
 }

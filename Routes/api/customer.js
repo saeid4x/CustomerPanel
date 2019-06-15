@@ -4,6 +4,8 @@ var express=require('express'),
 var profileModel=require('../../Models/profile');
 var orderModel=require('../../Models/orders');
 var userModel=require('../../Models/users');
+var pointModel=require('../../Models/points');
+
 var lotteryUsersModel=require('../../Models/LotteryUsers');
 var path=require('path');
 var Helper=require('../../Controller/Helper');
@@ -33,7 +35,7 @@ router.get('/:userID/getProfile',(req,res)=>{
          if(data){
             
             res.json(data);
-            console.log(data)
+             
             // console.log(data);
          }
          
@@ -41,38 +43,54 @@ router.get('/:userID/getProfile',(req,res)=>{
 })
 router.post('/:userID/setProfile',upload.single('avatar_img'),(req,res)=>{
 
-   let {name,family,age,address,gender}=req.body;
-    let avatar=req.file.filename;
+   var {name,family,age,address,gender,roleUser}=req.body;
+   let avatar=req.file.filename;
  
-   
    profileModel.findOneAndUpdate({userID:req.params.userID},{$set:{name,family,age,address,gender,avatar}},{upsert:true})
-      .then((data)=>{
-         if(data){
-            // res.json(data)
-            res.redirect(Keys.frontendUrl+'/customer/dashboard')
-            console.log(data);
-           
+   .then((data)=>{
+      if(data){
+         switch (roleUser) {
+            case 'admin':{
+               res.status(200).redirect(Keys.frontendUrl+'/admin/dashboard')
 
+            } 
+               break;
+               case 'adminBranch':{
+                  res.status(200).redirect(Keys.frontendUrl+'/adminBranch/dashboard')
+
+               }
+               break;
+               case 'customer':{
+                  res.status(200).redirect(Keys.frontendUrl+'/customer/dashboard')
+               }
+               break;
+          
          }
-      })
+         // res.json(data)
+      }
+   })
+
+    
+ 
+  
 
 })
 
 
 //ReportBranchSpec(default)
-router.get('/:userID/report/branchRelatedOrderUser',(req,res)=>{
+router.get('/:userID/report/getOrderUser',(req,res)=>{
    let userID=req.params.userID;
 
    orderModel.find({userID})
-      .then((data=>{
+      .then((data)=>{
          if(data){
             res.json(data)
          }
          else{
-            res.send('no data')
+            res.json({err:'no-data'})
          }
        
-      })).catch((err)=>{
+      }).catch((err)=>{
          res.json(err)
       })
    
@@ -80,9 +98,22 @@ router.get('/:userID/report/branchRelatedOrderUser',(req,res)=>{
 //ReportBranchSpec(apply filter)
 router.post('/:userID/report/branchRelatedOrderUser',(req,res)=>{
    let userID=req.params.userID;
-    
-   let fromDate=req.body.fromDate;
-   let toDate=req.body.toDate;
+   var fromDate;
+   var toDate;
+     if(req.body.fromDate == undefined || !req.body.fromDate){
+        fromDate='1300/1/1';
+     }
+     if(req.body.toDate==undefined || !req.body.toDate){
+        toDate='1500/1/1'
+     }
+     if(req.body.fromDate){
+        fromDate=req.body.fromDate
+     }
+     if(req.body.toDate){
+        toDate=req.body.toDate
+     }
+    console.log('fromDate=',fromDate);
+    console.log('toDate=',toDate);
    let branchID=req.body.selectBranch;
    let orderPrice=60000;
    console.log('600',branchID)
@@ -107,11 +138,28 @@ router.post('/:userID/report/branchRelatedOrderUser',(req,res)=>{
    
 router.post('/:userID/report/complete',(req,res)=>{
    let userID=req.params.userID;    
-   let fromDate=req.body.fromDate;
-   let toDate=req.body.toDate;
+   // let fromDate=req.body.fromDate;
+   // let toDate=req.body.toDate;
+   var fromDate;
+   var toDate;
+     if(req.body.fromDate == undefined || !req.body.fromDate){
+        fromDate='1300/1/1';
+     }
+     if(req.body.toDate==undefined || !req.body.toDate){
+        toDate='1500/1/1'
+     }
+     if(req.body.fromDate){
+        fromDate=req.body.fromDate
+     }
+     if(req.body.toDate){
+        toDate=req.body.toDate
+     }
+    console.log('fromDate=',fromDate);
+    console.log('toDate=',toDate);
    let fromDateMili= Helper.MiladiToMilisecond(Helper.ToMiladi(fromDate));
    let toDateMili= Helper.MiladiToMilisecond(Helper.ToMiladi(toDate));
 
+//get filtered-orders
    orderModel.find({userID,orderDate:{$gte:fromDateMili,$lte:toDateMili}})
       .then((data)=>{
          if(data){
@@ -121,6 +169,9 @@ router.post('/:userID/report/complete',(req,res)=>{
       }).catch((err)=>{
          res.json(err)
       })
+
+      //get additional info about order
+
 })
    
 router.get('/',(req,res)=>{
@@ -166,12 +217,51 @@ router.post('/test/setProfile',(req,res)=>{
    })
 })
 
-router.post('/test2',(req,res)=>{
-   let shamsi=req.body.shamsi;
-   console.log('shamsi',shamsi)
-   let date= Helper.MiladiToMilisecond(Helper.ToMiladi(shamsi));
-   let t=date-1;
-   res.json(t)
+router.post('/report/complete/otherInfo',(req,res)=>{
+  
+   var fromDate;
+   var toDate;
+   let userID=req.body.userID;
+     if(req.body.fromDate == undefined || !req.body.fromDate){
+        fromDate='1300/1/1';
+     }
+     if(req.body.toDate==undefined || !req.body.toDate){
+        toDate='1500/1/1'
+     }
+     if(req.body.fromDate){
+        fromDate=req.body.fromDate
+     }
+     if(req.body.toDate){
+        toDate=req.body.toDate
+     }
+    console.log('fromDate=',fromDate);
+    console.log('toDate=',toDate);
+   let fromDateMili= Helper.MiladiToMilisecond(Helper.ToMiladi(fromDate));
+   let toDateMili= Helper.MiladiToMilisecond(Helper.ToMiladi(toDate));
+   orderModel.aggregate([
+      {$match:{userID,orderDate:{$gte:fromDateMili,$lte:toDateMili}}},
+      {$group:{_id:'$userID',countOrder:{$sum:1},totalPrice:{$sum:'$orderPrice'},sumPoint:{$sum:'$orderPoint'}}}
+   ]).exec((err,loc)=>{
+       
+      if(loc){
+         loc.map(item=>{
+            let data={
+               countOrder:item.countOrder,
+               sumPrice:item.totalPrice,
+               sumPoint:item.sumPoint,
+               
+            }
+            
+             res.json({data,err:false});
+             console.log(item.countOrder);
+          })
+      }
+      else if(err){
+         res.json({err:true})
+      }
+   })
+
+
 
 
 })
@@ -205,13 +295,17 @@ router.get('/getUser/:userID',(req,res)=>{
       })
 })
 
-router.get('/test5/:userID',(req,res)=>{
-   userModel.findOne({_id:req.params.userID})
-      .then((data)=>{
-         if(data){
-            res.json(data)
-         }
-      })
+router.get('/test5',(req,res)=>{
+    new pointModel({
+       basePoint:1,
+       basePrice:1000,
+       minPointForMontlyLottery:30,
+       minPointForYearlyLottery:50
+    }).save((err,data)=>{
+       if(data){
+          res.json(data)
+       }
+    })
 })
 router.get('/test',(req,res)=>{
    new lotteryUsersModel({
@@ -230,6 +324,7 @@ router.get('/test',(req,res)=>{
    })
 
 })
+
 
 
 module.exports=router;

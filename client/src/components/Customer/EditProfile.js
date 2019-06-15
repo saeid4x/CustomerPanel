@@ -13,7 +13,8 @@ export default class extends Component{
         gender:null,
         address:null,
         avatar:null,
-          userID:localStorage.getItem('userID')
+          userID:localStorage.getItem('userID'),
+          roleUser:localStorage.getItem('roleUser')
 
     }
     handleSubmit=(e)=>{
@@ -71,7 +72,7 @@ export default class extends Component{
                  <div className="form-group">
                      <label htmlFor="name">نام</label>
                      <input type="text" name="name" defaultValue={this.state.name} className="form-control" ref={(val)=>{this.name=val}}/>
-                     
+                     <input type="hidden" name='roleUser' value={this.state.roleUser}/>
                  </div>
                  <div className="form-group">
                      <label htmlFor="family">نام خانوادگی</label>
@@ -91,7 +92,7 @@ export default class extends Component{
                  <div className="form-group">
                      <label htmlFor="gender">جنسیت</label>
                      {/* <input type="text" name="gender"  defaultValue={this.state.gender}  className="form-control" ref={(val)=>{this.gender=val}}/> */}
-                     <select name="" id="" ref={(val)=>{this.gender=val}} className="form-control">
+                     <select name="" id="" ref={(val)=>{this.gender=val}} name='gender' className="form-control">
                          <option value="male">مرد</option>
                          <option value="female">زن</option>
                      </select>

@@ -9,6 +9,8 @@ import {
   } from "react-advance-jalaali-datepicker";
 import Header from '../General/Header';
 import Helper from '../../Controller/Helper'
+import SideNavigation from './SideNavigation';
+import CardTowRow from '../General/CardTowRow';
  
 
 
@@ -20,7 +22,10 @@ export default class extends Component{
         toDate:null,
         showDateSelected:'none',
         showDetailsTable:'none',
-        userID:localStorage.getItem('userID')
+        userID:localStorage.getItem('userID'),
+        totalPrices:null,
+        totalPoint:null,
+        countOrder:null
         
        
     }
@@ -72,7 +77,37 @@ export default class extends Component{
                     showDetailsTable:'block'
                 })
             }
-        }).catch((err)=>{
+        }).then(()=>{
+
+            let filterData={
+                userID:this.state.userID,
+                fromDate:this.state.fromDate,
+                toDate:this.state.toDate
+            }
+
+            axios.post(Keys.backendUrl+'api/customer/report/complete/otherInfo',filterData)
+                .then((result)=>{
+
+                    if(result.data){
+                        console.log(result.data.data.countOrder)
+                         
+                        this.setState({
+                            totalPrices:result.data.data.sumPrice,
+                            totalPoint:result.data.data.sumPoint,
+                            countOrder:result.data.data.countOrder
+                        })
+
+                    }
+
+                }).then(()=>{
+                    // console.log('@205',this.state.totalPoint);
+                    // console.log('@205',this.state.totalPrices);
+                    // console.log('@205',this.state.countOrder);
+
+                })
+
+        })        
+        .catch((err)=>{
             console.log(err);
         })
        
@@ -91,11 +126,11 @@ export default class extends Component{
     //    ):null;
 
 
-       let number=0;
+       let number=1;
        let tableInfo=this.state.data.length ? (
            this.state.data.map(item=>(
                <tr>
-                       <td> {number+1} </td>
+                       <td> {number++} </td>
                        <td>{item.orderName } </td>
                        <td>{item.orderPrice} </td>
                        <td> {item.branchName} </td>
@@ -111,8 +146,9 @@ export default class extends Component{
         return(
             <section className="ReportBranchSpec">
                 <Header/>
+                <SideNavigation/>
 
-            <section className="container">
+            <section className="">
                 <center><h2>گزارش کامل </h2></center>
                 <hr/>
                 <form onSubmit={this.handleSubmit}>
@@ -146,8 +182,21 @@ export default class extends Component{
                 <div style={{display:`${this.state.showDateSelected}`}} className="completeReport-dateSelected">
                     <h4> گزارش از تاریخ: {this.state.fromDate} تا تاریخ  {this.state.toDate}</h4>
                 </div>
+                <hr/>
+                <div className="row" style={{marginLeft:100}}>
+                    <div className="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <CardTowRow cardTitle='تعداد کل خریدها' cardValue={!this.state.countOrder ?'----':this.state.countOrder}/>
+                    </div>
+                    <div className="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <CardTowRow cardTitle='مبلغ کل خریدها ' cardValue={!this.state.totalPrices ? '----':this.state.totalPrices}/>
+                    </div>
+                    <div className="col-3 col-sm-3 col-md-3 col-lg-3">
+                    <CardTowRow cardTitle='مجموع امتیازها' cardValue={!this.state.totalPoint ?'----':this.state.totalPoint}/>
+                    </div>
+                </div>
+               
                 <center>
-                <table className="table table-striped completeReport-DetailsTable-table" style={{display:`${this.state.showDetailsTable}`}}>
+                <table className="table table-striped bg-primary completeReport-DetailsTable-table" style={{display:`${this.state.showDetailsTable}`}}>
                     <tr>
                     <th> #</th>
                     <th>کالا </th>

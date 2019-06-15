@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 // import AdminLayout from "./AdminLayout";
 import Keys  from '../../config/keys';
-import Helper  from '../../Controller/Helper';
 import axios from 'axios';
 import {
   DatePicker, 
@@ -10,7 +9,6 @@ import {
 import Header from '../General/Header';
 import SideNav from './SideNav'
 import "../../StaticFiles/css/Admin/ReportOrderOtherBranch.css";
-
 
 
 export default class extends Component {
@@ -94,15 +92,15 @@ componentDidMount(){
 //    ):null;
 
 
-   let number=1;
+   let number=0;
    let tableInfo=this.state.orderInfo.length ? (
        this.state.orderInfo.map(item=>(
            <tr>
-                   <td> {number++} </td>
+                   <td> {number+1} </td>
                    <td>{item.orderName } </td>
                    <td>{item.orderPrice} </td>
                    <td> {item.branchName} </td>
-                   <td>  {Helper.ToShamsi(Helper.MilisecondToMiladi(item.orderDate))}  </td>
+                   <td>  {item.orderDate}  </td>
                    <td>  {item.orderTime}  </td>
                    <td>  {item.orderPoint}  </td>
            </tr>
@@ -119,15 +117,8 @@ componentDidMount(){
 <center>
             <h2>گزارش خرید از شعبه های مختلف </h2></center>
             <hr/>
-            <div className="filter-area">
             <form onSubmit={this.handleSubmit}>
-            <div className="form-group">
-                <label htmlFor="selectBranch">انتخاب شعبه </label>
-                <select name="selectBranch" className="form-control" ref={(val)=>{this.selectBranch=val}}>
-                    {data}
-                </select>
-
-            </div>
+          
             
             <div className="form-group">
                 <h3 style={{float:'right'}}>تاریخ</h3><br/><br/>
@@ -148,7 +139,6 @@ componentDidMount(){
             </center>
 
             </form>
-            </div>
             <hr/>
             <div className="ReportBranchSpec-dateSelect">
 
@@ -156,7 +146,7 @@ componentDidMount(){
             </div>
             <hr/>
             <section className="container " style={{display:`${this.state.showTable}`}}>
-            <table className=" table table-hover table-striped bg-primary">
+            <table className=" table DetailsTable-table">
                 <tr>
                 <th> #</th>
                 <th>کالا </th>

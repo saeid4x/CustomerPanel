@@ -16,7 +16,7 @@ export default class extends Component{
 
                 <ul class="list-group">
                     <li class="list-group-item active"><center>گزارش ها </center></li>
-                    <li class="list-group-item"> <Link to="/admin/report/OrderFromBranch"> گزارش خرید از شعبه های مختلف</Link>    </li>
+                    <li class="list-group-item"> <Link to="/admin/report/OrderFromBranch"> مشاهده گزارش</Link>    </li>
                      
                  </ul>
                 </section>

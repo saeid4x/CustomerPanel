@@ -8,7 +8,8 @@ export default class extends Component{
 
 
     state={
-        branchesInfo:[]
+        branchesInfo:[],
+        adminBranchID:null
     }
     handleSubmit=(e)=>{
         e.preventDefault();
@@ -21,18 +22,35 @@ export default class extends Component{
         }
         console.log('form data',formData)
     // console.log('branch Name=',this.branchID.value)
-        axios.post(Keys.backendUrl+'api/admin/addBranchAdmin',formData)
+
+    //1- add user and get userID then set adminBranchID=userID
+        axios.post(Keys.backendUrl+'api/saveUser/'+formData.mobile+'/adminBranch',formData)
             .then((data)=>{
+                if(data.data){
+                    //5d03a7cff00d10ecaf894aab
+                    console.log('@2000',data.data._id)
+                    this.setState({
+                        adminBranchID:data.data._id
+                    })
+                }
 
             }).then(()=>{
-                alert('ثبت موفقیت آمیز');
-            });
-
-            // window.location.href=Keys.frontendUrl+"/admin/addBranchAdmin"
-
-
+                //add adminBranch to branch
+                let data={
+                    branchID:this.branchID.value,
+                    adminBranchID:this.state.adminBranchID
 
 
+                }
+                console.log('@2001',data)
+                axios.post(Keys.backendUrl+'api/admin/addBranchAdmin',data)
+                    .then((data)=>{
+                        if(data.data){
+                            alert('register successfully')
+                        }
+                    })
+
+            })
     }
     componentDidMount(){
         axios.get(Keys.backendUrl+'api/admin/getBranches')

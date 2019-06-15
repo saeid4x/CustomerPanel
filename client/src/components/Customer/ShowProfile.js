@@ -22,12 +22,18 @@ export default class  extends Component{
             .then((data)=>{
                 console.log(data.data)
                 if(data){
+                    let gender;
+                    if(data.data.gender == 'male'){
+                        gender='مرد'
+                    }else{
+                        gender='زن'
+                    }
                     this.setState({
                         userID:data.data.userID,
                         name:data.data.name,
                         family:data.data.family,
                         age:data.data.age,
-                        gender:data.data.gender,
+                        gender,
                         address:data.data.address,
                         avatar:data.data.avatar
                     })

@@ -20,7 +20,8 @@ export default class extends Component{
         axios.post(Keys.backendUrl+'api/admin/addBasePoint',formData)
             .then((data)=>{
                 if(data){
-                    console.log('100',data.data)
+                    console.log('100',data.data);
+                    window.location.href=Keys.frontendUrl+"admin/pointsWithOrder"
                 }
                 else{
                     console.log('101','error')
@@ -28,11 +29,6 @@ export default class extends Component{
             }).catch((err)=>{
                 console.log(err);
             })
-
-
-
-        console.log("form data=",formData);
-        window.location.href=Keys.frontendUrl+"/admin/pointsWithOrder"
     }
     componentDidMount(){
         axios.get(Keys.backendUrl+'api/admin/getBasePoint')

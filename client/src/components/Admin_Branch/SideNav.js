@@ -59,6 +59,8 @@ export default class extends Component{
                 <section  className="adminBranch-category">
                     <ul>
                         <li> <Link to='/adminBranch/addUser'>  افزودن خرید  </Link></li>
+                        <li> <Link to='/adminBranch/reportOrder'> گزارش ها</Link></li>
+                        <li> <Link to='/adminBranch/profile'>پروفایل</Link></li>
                    
                         {/* <li> <Link to="">   گزارش گیری  </Link></li> */}
                     </ul>

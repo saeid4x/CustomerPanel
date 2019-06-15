@@ -3,6 +3,7 @@ var express=require('express'),
 var orderModel=require('../../Models/orders');
 var userModel=require('../../Models/users');
 var pointModel=require('../../Models/points');
+var LotteryUserModel=require('../../Models/LotteryUsers');
  var profileModel=require('../../Models/profile');
  var branchModel=require('../../Models/branch');
  
@@ -27,6 +28,9 @@ branchModel.findOne({adminBranch:req.params.adminBranch})
         if(data){
             res.json(data)
         }
+        
+    }).catch((err)=>{
+        res.json(err)
     })
  })
 
@@ -47,13 +51,26 @@ router.post('/order/addOrder',(req,res)=>{
     
     let orderDate=Helper.MiladiToMilisecond(Helper.CurrentDate());
     let orderTime=Helper.CurrentTime();
-    let {userID,orderName,orderPrice,orderPoint,branchID}=req.body;
+    let orderPoint=req.body.orderPoint;
+    // console.log('orderPoint',orderPoint);
+    let userID=req.body.customerID;
+    let orderName;
+    if(!req.body.orderName){
+        orderName='نامشخص';
+    }
+    else{
+        orderName=req.body.orderName;
+    }
+    let {orderPrice,BranchID,BranchName}=req.body;
+
+    //@@branchName
     new orderModel({
         userID,
         orderName,
         orderPrice,
         orderPoint,
-        branchID,
+        branchID:BranchID,
+        branchName:BranchName,
         orderDate,
         orderTime
     }).save((err,data)=>{
@@ -71,50 +88,166 @@ router.post('/order/addOrder',(req,res)=>{
     });// end insert data
 })
 
-router.get('/:userID/addToLottery/:lotteryType',(req,res)=>{
+router.post('/:customerID/addToLottery',(req,res)=>{
 
-    let fromDate;
-    let toDate;
-    switch(req.params.lotteryType){
+
+    // let data=Helper.ToShamsi(Helper.MilisecondToMiladi(Helper.EndOfMonth(Helper.ToMiladi('1398/5/10'))))
+    var fromDate;
+
+    var toDate;
+    var mobile=req.body.mobile;
+    var customerID=req.params.customerID;
+    // if(customerID){
+    //     userModel.findOne({_id:customerID})
+    //         .then((data)=>{
+    //             if(data){
+    //                 localStorage.setItem('customerMobile')
+    //             }
+
+    //         })
+    // }
+    switch(req.body.lotteryType){
         case 'montly':{
+            
             fromDate=Helper.MiladiToMilisecond(Helper.CurrentDate());
-            toDate=Helper.MiladiToMilisecond(Helper.EndOfMonth(Helper.CurrentDate()));
+            toDate=Helper.EndOfMonth(Helper.CurrentDate())         
+            console.log('switch from date | toDate',fromDate+'***'+toDate)
             
         }
         break;
         case 'yearly':{
             fromDate=Helper.MiladiToMilisecond(Helper.CurrentDate());
-            toDate=Helper.MiladiToMilisecond(Helper.EndOfYear(Helper.CurrentDate()));
+            toDate=Helper.EndOfYear(Helper.CurrentDate())  
 
         }
         break;
     }
-    if(fromDate && toDate && userID){
-        let data={
-            userID:req.params.userID,
-            fromDate,
-            toDate,
-            lotteryType:req.params.lotteryType
-            
-        }
-        LotteryUserModel.findOneAndUpdate({userID:req.params.userID},data,{upsert:true})
+    console.log('from dtae',fromDate);
+    console.log('to dtae',toDate);
+    var data={
+        userID:req.params.customerID,
+        fromDate,
+        toDate,
+        lotteryType:req.body.lotteryType,
+        userMobile:mobile
+        
+    }
+
+    
+        // console.log('@207',data);
+        LotteryUserModel.findOneAndUpdate({userID:req.params.customerID},data,{upsert:true})
             .then((data)=>{
                 if(data){
                     res.json(data)
                 }
+            }).catch((err)=>{
+                res.json(err)
             })
+})
+router.post('/report/:branchID',(req,res)=>{
 
-    }
+    var branchID=req.params.branchID;
+   var fromDate;
+   var toDate;
+     if(req.body.fromDate == undefined || !req.body.fromDate){
+        fromDate='1300/1/1';
+     }
+     if(req.body.toDate==undefined || !req.body.toDate){
+        toDate='1500/1/1'
+     }
+     if(req.body.fromDate){
+        fromDate=req.body.fromDate
+     }
+     if(req.body.toDate){
+        toDate=req.body.toDate
+     }
+    console.log('fromDate=',fromDate);
+    console.log('toDate=',toDate);
+   let fromDateMili= Helper.MiladiToMilisecond(Helper.ToMiladi(fromDate));
+   let toDateMili= Helper.MiladiToMilisecond(Helper.ToMiladi(toDate));
    
+   
+   orderModel.find({branchID,orderDate:{$lte:toDateMili,$gte:fromDateMili}})
+      .then((data)=>{
+         if(data){
+            res.json(data)
+         }else{
+             res.json('error')
+         }
+         
+        
+      }).catch((err)=>{
+        res.json(err)
+      })
+})
 
+router.post('/report/:branchID/otherInfo',(req,res)=>{
 
+    
+   var fromDate;
+   var toDate;
+   let branchID=req.params.branchID;
+     if(req.body.fromDate == undefined || !req.body.fromDate){
+        fromDate='1300/1/1';
+     }
+     if(req.body.toDate==undefined || !req.body.toDate){
+        toDate='1500/1/1'
+     }
+     if(req.body.fromDate){
+        fromDate=req.body.fromDate
+     }
+     if(req.body.toDate){
+        toDate=req.body.toDate
+     }
+    console.log('fromDate=',fromDate);
+    console.log('toDate=',toDate);
+   let fromDateMili= Helper.MiladiToMilisecond(Helper.ToMiladi(fromDate));
+   let toDateMili= Helper.MiladiToMilisecond(Helper.ToMiladi(toDate));
+   orderModel.aggregate([
+      {$match:{branchID,orderDate:{$gte:fromDateMili,$lte:toDateMili}}},
+      {$group:{_id:'$branchID',totalPrice:{$sum:'$orderPrice'}}}
+   ]).exec((err,loc)=>{
+       
+      if(loc){
+         loc.map(item=>{
+            let data={
+            totalPrice:item.totalPrice
+            }
+             res.json({data,err:false});
+       
+          })
+      }
+      else if(err){
+         res.json({err:true})
+      }
+   })
+})
+router.get('/test6',(req,res)=>{
+ 
 
+    res.json(toDate);
+})
 
+//get customer count that related to one branch
+router.get('/report/:branchID/getCustomerCount',(req,res)=>{
+    let branchID=req.params.branchID;
+    orderModel.aggregate([
+        {$match:{branchID}},
+        {$group:{_id:'$userID'}},
+        {$count:'customerCount'}
+
+    ]).exec((err,loc)=>{
+        if(loc){
+            loc.map(item=>{
+                res.json({customerCount:item.customerCount})
+            })
+        }
+    })
 })
 router.get('/order/getDetailsOrder/:id',(req,res)=>{
     orderModel.find({userID:req.params.id})
         .then((data)=>{
-            console.log(data);
+            // console.log(data);
             res.json(data);
         })
 })
@@ -130,12 +263,12 @@ router.get('/getPointDefinition',(req,res)=>{
 })
 
 
-router.get('/:userID/getTotalPoints',(req,res)=>{
-    // let userID=req.params.userID;
-    let userID='user120';
-    var test= orderModel.aggregate([
-        {$match:{userID}} ,
-        {$group:{_id:"$userID",count:{$sum:1},total:{$sum:'$orderPoint'}}} 
+router.get('/:customerID/getTotalPoints',(req,res)=>{
+    
+    let customerID=req.params.customerID;
+      orderModel.aggregate([
+        {$match:{userID:customerID}} ,
+        {$group:{_id:"$userID",count:{$sum:1},totalPoint:{$sum:'$orderPoint'}}} 
       ]).exec((err,loc)=>{
           loc.map(item=>{
               res.json(item)
